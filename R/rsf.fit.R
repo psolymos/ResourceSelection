@@ -102,8 +102,8 @@ inits, method = "Nelder-Mead", control, ...)
         id.boot <- lapply(1:B, function(i)
             sample(1:N.used, N.used, replace=TRUE))
         ## parallel computation can be added here
-        boot.out <- if (require(pbapply)) {
-            pbsapply(id.boot, function(z) optim(cfs, nll.fun, 
+        boot.out <- if (requireNamespace("pbapply")) {
+            pbapply::pbsapply(id.boot, function(z) optim(cfs, nll.fun,
                 hessian = FALSE, method = method, control = control, boot = z)$par)
         } else {
             sapply(id.boot, function(z) optim(cfs, nll.fun, 

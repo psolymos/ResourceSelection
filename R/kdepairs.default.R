@@ -1,5 +1,4 @@
 kdepairs.default <- function(x, n=25, density=TRUE, contour=TRUE, ...) {
-    require(MASS)
     y <- data.frame(x)
     fun.lower <- function(x1, x2, ...) {
         if (is.factor(x1)) {
@@ -13,7 +12,7 @@ kdepairs.default <- function(x, n=25, density=TRUE, contour=TRUE, ...) {
             n <- 0
         if (n>0 && OK) {
             if (density || contour)
-                d <- kde2d(x1, x2, n=n)
+            d <- MASS::kde2d(x1, x2, n=n)
             if (density)
                 image(d, col=terrain.colors(50), add=TRUE)
             if (contour)
