@@ -1,5 +1,5 @@
 predict.rsf <-
-function(object, newdata = NULL, type = c("link", "response"), 
+function(object, newdata = NULL, type = c("link", "response"),
 part = c("avail", "used", "all"), se.fit = FALSE, ...){
     type <- match.arg(type)
     part <- match.arg(part)
@@ -34,7 +34,11 @@ part = c("avail", "used", "all"), se.fit = FALSE, ...){
         }
     }
     if (se.fit) {
-        se <- sapply(1:Bp, function(i) drop(X %*% boot[,i]))
+        se <- sapply(1:Bp, function(i) {
+            cf <- if (object$link == "log")
+                c(0, boot[,i]) else boot[,i]
+            drop(X %*% cf)
+        })
         if (type == "response") {
             se <- binomial(object$link)$linkinv(se)
         }
