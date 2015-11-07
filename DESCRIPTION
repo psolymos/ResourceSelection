@@ -2,16 +2,16 @@ Package: ResourceSelection
 Type: Package
 Title: Resource Selection (Probability) Functions for Use-Availability Data
 Version: 0.2-5
-Date: 2015-05-14
+Date: 2015-11-06
 Author: Subhash R. Lele, Jonah L. Keim, Peter Solymos
 Maintainer: Peter Solymos <solymos@ualberta.ca>
-Description: Resource Selection (Probability) Functions for 
-  use-availability wildlife data as described in 
+Description: Resource Selection (Probability) Functions for
+  use-availability wildlife data as described in
   Lele and Keim (2006, Ecology 87, 3021--3028),
   and Lele (2009, J. Wildlife Management 73, 122--127).
 Depends: R (>= 2.13.0)
 Suggests: MASS, pbapply
-URL: http://cran.r-project.org/package=ResourceSelection, https://github.com/psolymos/ResourceSelection
+URL: https://github.com/psolymos/ResourceSelection
 License: GPL-2
 LazyLoad: yes
 LazyData: true
