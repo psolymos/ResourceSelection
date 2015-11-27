@@ -4,6 +4,7 @@
 
 * Fixed critical error messages in rsf & rspf functions that
   alert the user about the inclusion of continuous covariates.
+* log link was matched as logit in rspf call, now gives and error.
 
 ## Version 0.2-5, Nov 6, 2015
 

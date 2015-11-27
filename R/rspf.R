@@ -3,7 +3,9 @@ function(formula, data, m, B = 99, link = "logit",
 inits, method = "Nelder-Mead", control,
 model = TRUE, x = FALSE, ...)
 {
-    link <- match.arg(link, c("logit","cloglog","probit"))
+    link <- match.arg(link, c("logit","cloglog","probit","log"))
+    if (link == "log")
+        stop("link='log' is not allowed in rspf, use the rsf function instead")
     ## parsing formula
     if (missing(data))
         data <- parent.frame()
