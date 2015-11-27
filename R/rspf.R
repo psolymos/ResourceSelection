@@ -34,19 +34,15 @@ model = TRUE, x = FALSE, ...)
         stop("invalid dependent variable, not in c(0, 1)")
     if (length(Y) != NROW(X)) 
         stop("invalid dependent variable, not a vector")
-#    if (is.null(attr(mt, "variables")) && link == "log")
-#        stop("provide covariates for Exponential RSF")
     if (identical(as.character(ff[[2]]), "1"))
         stop("invalid formula, no covariates")
     factonly <- all(unique(sapply(mf, .MFclass)[-1]) %in% c("ordered", "factor"))
-#    if (factonly && link == "log")
-#        stop("provide at least 1 continuous covariate for Exponential RSF")
+    if (factonly)
+        stop("provide at least 1 continuous covariate for RSPF")
 
     ## fitting
     out1 <- rsf.fit(X=X, Y=Y, m=m, link = link, B = B, 
         inits=inits, method = method, control=control, ...)
-#    out1 <- rsf.fit(X=X, Y=Y, link = link, B = B, 
-#        inits=inits, method = method, control=control, ...)
 
     ## return value assembly
     out1$call <- match.call()
