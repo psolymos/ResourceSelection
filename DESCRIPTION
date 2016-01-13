@@ -12,6 +12,7 @@ Description: Resource Selection (Probability) Functions for
 Depends: R (>= 2.13.0)
 Suggests: MASS, pbapply
 URL: https://github.com/psolymos/ResourceSelection
+BugReports: https://github.com/psolymos/ResourceSelection/issues
 License: GPL-2
 LazyLoad: yes
 LazyData: true
