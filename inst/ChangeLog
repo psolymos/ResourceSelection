@@ -1,6 +1,6 @@
 # ResourceSelection package version history
 
-## Version 0.2-6, Nov 27, 2015
+## Version 0.2-6, Feb 15, 2016
 
 * Fixed critical error messages in rsf & rspf functions that
   alert the user about the inclusion of continuous covariates.
