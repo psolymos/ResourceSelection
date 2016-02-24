@@ -27,17 +27,7 @@ where \code{y} is a vector of observations,
 \code{x} is the set of covariates.
 }
   \item{m}{
-argument describing the matching of use and available points.
-All available points are used for each use points if \code{m=0}
-(global availability). If \code{m} is a single value, e.g. \code{m=5},
-it is assumed that available data points are grouped in batches of 5,
-e.g. with IDs \code{c(1,2)} for used point locations and 
-\code{c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2)} for available locations
-(local availability, matched use-available design).
-Similarly, a vector of matching IDs can also be provided, e.g.
-\code{c(1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2)} by combining the above two.
-This potentially could allow for unbalanced matching and for easier 
-subsetting of the data, but comes with an increased computing time.
+argument describing the matching of use and available points, see Details.
 }
   \item{data}{
 data.
@@ -88,6 +78,25 @@ The \code{rsf.fit} is the workhorse behind the two functions.
 
 LHS of the \code{formula} data must be binary, ones indicating used locations,
 while zeros indicating available location.
+
+All available points are used for each use points if \code{m=0}
+(global availability). If \code{m} is a single value, e.g. \code{m=5},
+it is assumed that available data points are grouped in batches of 5,
+e.g. with IDs \code{c(1,2)} for used point locations and 
+\code{c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2)} for available locations
+(local availability, matched use-available design).
+Similarly, a vector of matching IDs can also be provided, e.g.
+\code{c(1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2)} by combining the above two.
+This potentially could allow for unbalanced matching 
+(e.g. \code{c(1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2)})
+and for easier subsetting of the data, 
+but comes with an increased computing time.
+Note, the response in the LHS of the formula 
+should be coded as \code{c(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)}
+for all of the above examples. When \code{m} is defined as
+a mapping vector or the value is 0, the order of course does not matter.
+However, ordering matters when \code{m} is constant because that
+implies a certain structure.
 
 For model description and estimation details, see Lele and Keim (2006)
 and Lele (2009).
