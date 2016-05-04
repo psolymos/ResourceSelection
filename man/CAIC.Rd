@@ -1,5 +1,6 @@
 \name{CAIC}
 \alias{CAIC}
+\alias{CAICtable}
 \alias{CAIC.default}
 \title{
 Consistent AIC
@@ -10,6 +11,7 @@ Consistent AIC
 \usage{
 CAIC(object, ..., alpha)
 \method{CAIC}{default}(object, ..., alpha)
+CAICtable(object, ..., alpha)
 }
 \arguments{
   \item{object}{
@@ -29,18 +31,23 @@ CAIC = alpha * AIC + (1 - alpha) * BIC
 \value{
 Atomic vector if only one input object provided,
 a data frame similar to what is returned by
-\code{\link{AIC}} and \code{\link{BIC}} 
+\code{\link{AIC}} and \code{\link{BIC}}
 if there are more than one input objects.
+
+\code{CAICtable} returns a data frame with
+delta CAIC (dCAIC = CAIC - min(CAIC)) and CAIC
+weights (wCAIC = exp(-0.5 dCAIC_i) / sum(exp(-0.5 dCAIC_i)))
+where i = 1,...,m are candidate models.
 }
 \references{
-Bozdogan, H. 1987. 
-Model selection and Akaike's information criterion (AIC): 
-the general theory and its analytical extensions. 
+Bozdogan, H. 1987.
+Model selection and Akaike's information criterion (AIC):
+the general theory and its analytical extensions.
 Psychometrika, 52, 345-370.
 
 Taper, M. 2004. Model identification from many candidates.
 In: Taper, M. and Lele, S. R. (eds),
-The Nature of Scientific Evidence: Statistical, Philosophical, 
+The Nature of Scientific Evidence: Statistical, Philosophical,
 and Empirical Considerations.
 The University of Chicago Press, Chicago, IL, 567 pp.
 }
@@ -48,7 +55,7 @@ The University of Chicago Press, Chicago, IL, 567 pp.
 Subhash Lele and Peter Solymos
 }
 \seealso{
-\code{\link{AIC}}, \code{\link{BIC}} 
+\code{\link{AIC}}, \code{\link{BIC}}
 }
 \examples{
 ## compare some random models
@@ -65,6 +72,8 @@ CAIC(a, alpha=0)
 
 CAIC(a, b)
 CAIC(a, b, alpha=0.2)
+
+CAICtable(a, b, alpha=1)
 
 ## you can use global option
 ## useful when inside of xv or bootstrap
