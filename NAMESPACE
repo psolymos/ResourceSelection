@@ -1,4 +1,4 @@
-export(rsf.fit, rsf, rspf, hoslem.test, CAIC)
+export(rsf.fit, rsf, rspf, hoslem.test, CAIC, CAICtable)
 export(kdepairs, makeUsedAvail, simulateUsedAvail)
 importFrom(stats, BIC,
   logLik, model.matrix, model.frame, 
