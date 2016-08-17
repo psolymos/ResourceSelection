@@ -26,6 +26,6 @@ ask = prod(par("mfcol")) < x$np && dev.interactive(), ...)
     ylab <- if (class(x)[1] == "rspf")
         "Fitted probabilities" else "Fitted values"
     plot(x$formula, mf, ylab=ylab, ...)
-    invisible(x)
+    invisible(mf)
 }
 
