@@ -6,10 +6,9 @@
 Resource Selection (Probability) Functions for Use-Availability Data
 }
 \description{
-  Resource Selection (Probability) Functions for 
-  use-availability wildlife data as described in 
-  Lele and Keim (2006, Ecology 87, 3021--3028),
-  and Lele (2009, J. Wildlife Management 73, 122--127).
+Resource Selection (Probability) Functions for
+use-availability wildlife data as described in
+Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 }
 \details{
 \code{\link{rsf}}: Resource Selection Functions (RSF)
@@ -22,13 +21,18 @@ Subhash R. Lele, Jonah L. Keim, Peter Solymos
 Maintainer: Peter Solymos <solymos@ualberta.ca>
 }
 \references{
-Lele, S.R. (2009) 
-A new method for estimation of resource selection probability function. 
+Lele, S.R. (2009)
+A new method for estimation of resource selection probability function.
 Journal of Wildlife Management 73, 122--127.
 
-Lele, S. R. &  Keim, J. L. (2006) 
-Weighted distributions and estimation of resource selection probability functions. 
+Lele, S. R. &  Keim, J. L. (2006)
+Weighted distributions and estimation of resource selection probability functions.
 Ecology 87, 3021--3028.
+
+Solymos, P. & Lele, S. R. (2016)
+Revisiting resource selection probability functions and single-visit methods:
+clarification and extensions.
+Methods in Ecology and Evolution 7, 196--205.
 }
 \keyword{ package }
 \seealso{
