@@ -22,23 +22,18 @@ part = c("avail", "used", "all"), se.fit = FALSE, ...){
         if (se.fit)
             X <- model.matrix(object)[id,]
     } else {
-#        rhs <- model.frame(object$formula, newdata)
         ## response is not needed -- get rid of it
         rhs <- model.frame(delete.response(terms(object)), newdata)
         X <- model.matrix(attr(rhs, "terms"), rhs)
-        cfs <- if (object$link == "log")
-            c(0, coef(object)) else coef(object)
-        rval <- drop(X %*% cfs)
+        if (object$link == "log")
+            X <- X[,-1L,drop=FALSE]
+        rval <- drop(X %*% coef(object))
         if (type == "response") {
             rval <- binomial(object$link)$linkinv(rval)
         }
     }
     if (se.fit) {
-        se <- sapply(1:Bp, function(i) {
-            cf <- if (object$link == "log")
-                c(0, boot[,i]) else boot[,i]
-            drop(X %*% cf)
-        })
+        se <- sapply(1:Bp, function(i) drop(X %*% boot[,i]))
         if (type == "response") {
             se <- binomial(object$link)$linkinv(se)
         }
