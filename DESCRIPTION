@@ -3,7 +3,7 @@ Type: Package
 Title: Resource Selection (Probability) Functions for Use-Availability Data
 Version: 0.2-7
 Date: 2016-11-04
-Author: Subhash R. Lele, Jonah L. Keim, Peter Solymos
+Author: Subhash R. Lele [aut], Jonah L. Keim [aut], Peter Solymos [aut, cre]
 Maintainer: Peter Solymos <solymos@ualberta.ca>
 Description: Resource Selection (Probability) Functions for
   use-availability wildlife data as described in
