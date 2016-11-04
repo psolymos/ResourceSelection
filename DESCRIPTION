@@ -1,7 +1,7 @@
 Package: ResourceSelection
 Type: Package
 Title: Resource Selection (Probability) Functions for Use-Availability Data
-Version: 0.2-7
+Version: 0.3-0
 Date: 2016-11-04
 Author: Subhash R. Lele [aut], Jonah L. Keim [aut], Peter Solymos [aut, cre]
 Maintainer: Peter Solymos <solymos@ualberta.ca>

@@ -1,6 +1,6 @@
 # ResourceSelection package version history
 
-## Version 0.2-7, Nov 4, 2016
+## Version 0.3-0, Nov 4, 2016
 
 * `vcov.rsf` with log link dropped non-existent intercept, now fixed.
 * `ChangeLog` is now `NEWS.md`.
