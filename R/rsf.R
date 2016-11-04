@@ -1,5 +1,5 @@
 rsf <-
-function(formula, data, m, B = 99, 
+function(formula, data, m, B = 99,
 inits, method = "Nelder-Mead", control,
 model = TRUE, x = FALSE, ...)
 {
@@ -19,26 +19,27 @@ model = TRUE, x = FALSE, ...)
     X <- model.matrix(mt, mf)
     Xlevels <- .getXlevels(mt, mf)
     ## check variables
-    if (length(Y) < 1) 
+    if (length(Y) < 1)
         stop("empty model")
-    if (all(Y > 0)) 
+    if (all(Y > 0))
         stop("invalid dependent variable, no zero value")
-    if (!isTRUE(all.equal(as.vector(Y), as.integer(round(Y + 
-        0.001))))) 
+    if (!isTRUE(all.equal(as.vector(Y), as.integer(round(Y +
+        0.001)))))
         stop("invalid dependent variable, non-integer values")
     Y <- as.integer(round(Y + 0.001))
-    if (any(Y < 0)) 
+    if (any(Y < 0))
         stop("invalid dependent variable, negative counts")
-    if (any(!(Y %in% c(0, 1)))) 
+    if (any(!(Y %in% c(0, 1))))
         stop("invalid dependent variable, not in c(0, 1)")
-    if (length(Y) != NROW(X)) 
+    if (length(Y) != NROW(X))
         stop("invalid dependent variable, not a vector")
+    ## need to have covariates (i.e. not only intercept)
+    ## but that covariate can be factor/numeric etc.
     if (identical(as.character(ff[[2]]), "1"))
         stop("invalid formula, no covariates")
-    factonly <- all(unique(sapply(mf, .MFclass)[-1]) %in% c("ordered", "factor"))
 
     ## fitting
-    out1 <- rsf.fit(X=X, Y=Y, m=m, link = "log", B = B, 
+    out1 <- rsf.fit(X=X, Y=Y, m=m, link = "log", B = B,
         inits=inits, method = method, control=control, ...)
 
     ## return value assembly
