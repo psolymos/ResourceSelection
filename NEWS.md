@@ -1,5 +1,9 @@
 # ResourceSelection package version history
 
+## Version 0.2-7, Nov 4, 2016
+
+* vcov.rsf (log link) dropped non-existent intercept, now fixed.
+
 ## Version 0.2-6, Feb 15, 2016
 
 * Fixed critical error messages in rsf & rspf functions that
