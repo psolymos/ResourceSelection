@@ -16,10 +16,16 @@ Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 install.packages("ResourceSelection")
 ```
 
+User visible changes in the package are listed in the [NEWS](https://github.com/psolymos/ResourceSelection/blob/master/NEWS.md) file.
+
 ## Report a problem
 
 Use the [issue tracker](https://github.com/psolymos/ResourceSelection/issues)
 to report a problem.
+
+## License
+
+[GPL-2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 ## References
 
