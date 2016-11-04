@@ -4,6 +4,8 @@
 
 * `vcov.rsf` with log link dropped non-existent intercept, now fixed.
 * `ChangeLog` is now `NEWS.md`.
+* `predict` method failed due to missing intercepts, now fixed.
+* Continuous integration and testing added to development suite.
 * Documentation is revised.
 
 ## Version 0.2-6, Feb 15, 2016
