@@ -4,6 +4,8 @@
 
 * `vcov.rsf` with log link dropped non-existent intercept, now fixed.
 * `ChangeLog` is now `NEWS.md`.
+* `residuals` method added that follows the scaling used for the H-L
+  test in the summaries.
 * `predict` method failed due to missing intercepts, now fixed.
 * Continuous integration and testing added to development suite.
 * Documentation is revised.
