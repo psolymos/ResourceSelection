@@ -121,10 +121,10 @@ kdepairs(m2)
 
 Lele, S.R. (2009)
 A new method for estimation of resource selection probability function.
-_Journal of Wildlife Management_ 73, 122--127.
+_Journal of Wildlife Management_ 73, 122--127. [[PDF](http://www.stat.ualberta.ca/~slele/publications/Lele%20JWM%2009.pdf)]
 
 Lele, S. R. &  Keim, J. L. (2006)
 Weighted distributions and estimation of resource selection probability functions.
-_Ecology_ 87, 3021--3028.
+_Ecology_ 87, 3021--3028. [[PDF](http://www.stat.ualberta.ca/~slele/publications/LeleKeim06.pdf)]
 
 Solymos, P. & Lele, S. R. (2016) Revisiting resource selection probability functions and single-visit methods: clarification and extensions. _Methods in Ecology and Evolution_ 7, 196--205. [[PDF](http://arxiv.org/abs/1501.05880)]
