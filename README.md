@@ -6,8 +6,9 @@
 [![Windows build status](https://ci.appveyor.com/api/projects/status/a4a31xk3k18ubdku?svg=true)](https://ci.appveyor.com/project/psolymos/resourceselection)
 [![Code coverage status](https://codecov.io/gh/psolymos/ResourceSelection/branch/master/graph/badge.svg)](https://codecov.io/gh/psolymos/ResourceSelection)
 
-Resource Selection (Probability) Functions for
-use-availability wildlife data as described in
+Resource Selection (Probability) Functions
+for use-availability wildlife data
+based on weighted distributions as described in
 Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 
 ## Install
@@ -121,10 +122,10 @@ kdepairs(m2)
 
 Lele, S.R. (2009)
 A new method for estimation of resource selection probability function.
-_Journal of Wildlife Management_ 73, 122--127. [[PDF](http://www.stat.ualberta.ca/~slele/publications/Lele%20JWM%2009.pdf)]
+_Journal of Wildlife Management_ 73, 122--127. [[link](http://dx.doi.org/10.2193/2007-535)]
 
 Lele, S. R. &  Keim, J. L. (2006)
 Weighted distributions and estimation of resource selection probability functions.
-_Ecology_ 87, 3021--3028. [[PDF](http://www.stat.ualberta.ca/~slele/publications/LeleKeim06.pdf)]
+_Ecology_ 87, 3021--3028. [[link](http://dx.doi.org/10.1890/0012-9658(2006)87[3021:WDAEOR]2.0.CO;2)]
 
-Solymos, P. & Lele, S. R. (2016) Revisiting resource selection probability functions and single-visit methods: clarification and extensions. _Methods in Ecology and Evolution_ 7, 196--205. [[PDF](http://arxiv.org/abs/1501.05880)]
+Solymos, P. & Lele, S. R. (2016) Revisiting resource selection probability functions and single-visit methods: clarification and extensions. _Methods in Ecology and Evolution_ 7, 196--205. [[link](http://dx.doi.org/10.1111/2041-210X.12432), [preprint](http://arxiv.org/abs/1501.05880)]
