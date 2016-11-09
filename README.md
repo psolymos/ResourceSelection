@@ -13,7 +13,7 @@ Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 
 ## Install
 
-```
+```R
 install.packages("ResourceSelection")
 ```
 
@@ -30,7 +30,7 @@ to report a problem.
 
 ## Example
 
-```
+```R
 ## Some data processing
 goats$exp.HLI <- exp(goats$HLI)
 goats$sin.SLOPE <- sin(pi * goats$SLOPE / 180)
@@ -45,69 +45,66 @@ m2 <- rspf(STATUS ~ TASP + ELEVATION, goats, m=0, B = 99)
 
 ## Inspect the summaries
 summary(m1)
-
-## Call:
-## rspf(formula = STATUS ~ TASP + sin.SLOPE + ELEVATION, data = goats, m = 0,
-##     B = 99)
-##
-## Resource Selection Probability Function (Logistic RSPF) model
-## Non-matched Used-Available design
-## Maximum Likelihood estimates
-## with Nonparametric Bootstrap standard errors (B = 99)
-##
-## Fitted probabilities:
-##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
-## 1.947e-08 4.280e-07 9.977e-07 1.376e-06 1.924e-06 8.793e-06
-##
-## Coefficients (logit link):
-##              Estimate Std. Error z value Pr(>|z|)
-## (Intercept) -16.89454    0.26284 -64.276   <2e-16 ***
-## TASP          0.39116    0.01396  28.011   <2e-16 ***
-## sin.SLOPE     5.36640    0.09740  55.098   <2e-16 ***
-## ELEVATION     0.09829    0.01165   8.439   <2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-##
-## Log-likelihood: -5.729e+04
-## BIC = 1.146e+05
-##
-## Hosmer and Lemeshow goodness of fit (GOF) test:
-## X-squared = 152.4, df = 8, p-value < 2.2e-16
+# Call:
+# rspf(formula = STATUS ~ TASP + sin.SLOPE + ELEVATION, data = goats, m = 0,
+#     B = 99)
+#
+# Resource Selection Probability Function (Logistic RSPF) model
+# Non-matched Used-Available design
+# Maximum Likelihood estimates
+# with Nonparametric Bootstrap standard errors (B = 99)
+#
+# Fitted probabilities:
+#      Min.   1st Qu.    Median      Mean   3rd Qu.      Max.
+# 1.947e-08 4.280e-07 9.977e-07 1.376e-06 1.924e-06 8.793e-06
+#
+# Coefficients (logit link):
+#              Estimate Std. Error z value Pr(>|z|)
+# (Intercept) -16.89454    0.26284 -64.276   <2e-16 ***
+# TASP          0.39116    0.01396  28.011   <2e-16 ***
+# sin.SLOPE     5.36640    0.09740  55.098   <2e-16 ***
+# ELEVATION     0.09829    0.01165   8.439   <2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#
+# Log-likelihood: -5.729e+04
+# BIC = 1.146e+05
+#
+# Hosmer and Lemeshow goodness of fit (GOF) test:
+# X-squared = 152.4, df = 8, p-value < 2.2e-16
 
 summary(m2)
-
-## Call:
-## rspf(formula = STATUS ~ TASP + ELEVATION, data = goats, m = 0, B = 99)
-##
-## Resource Selection Probability Function (Logistic RSPF) model
-## Non-matched Used-Available design
-## Maximum Likelihood estimates
-## with Nonparametric Bootstrap standard errors (B = 99)
-##
-## Fitted probabilities:
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-## 0.01194 0.58010 0.86180 0.73660 0.95710 0.99830
-##
-## Coefficients (logit link):
-##             Estimate Std. Error z value Pr(>|z|)
-## (Intercept)  1.62906    0.10110   16.11   <2e-16 ***
-## TASP         1.86071    0.07751   24.01   <2e-16 ***
-## ELEVATION    1.14338    0.08315   13.75   <2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-##
-## Log-likelihood: -5.91e+04
-## BIC = 1.182e+05
-##
-## Hosmer and Lemeshow goodness of fit (GOF) test:
-## X-squared = 174.3, df = 8, p-value < 2.2e-16
+# Call:
+# rspf(formula = STATUS ~ TASP + ELEVATION, data = goats, m = 0, B = 99)
+#
+# Resource Selection Probability Function (Logistic RSPF) model
+# Non-matched Used-Available design
+# Maximum Likelihood estimates
+# with Nonparametric Bootstrap standard errors (B = 99)
+#
+# Fitted probabilities:
+#    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+# 0.01194 0.58010 0.86180 0.73660 0.95710 0.99830
+#
+# Coefficients (logit link):
+#             Estimate Std. Error z value Pr(>|z|)
+# (Intercept)  1.62906    0.10110   16.11   <2e-16 ***
+# TASP         1.86071    0.07751   24.01   <2e-16 ***
+# ELEVATION    1.14338    0.08315   13.75   <2e-16 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#
+# Log-likelihood: -5.91e+04
+# BIC = 1.182e+05
+#
+# Hosmer and Lemeshow goodness of fit (GOF) test:
+# X-squared = 174.3, df = 8, p-value < 2.2e-16
 
 ## Compare models: looks like m1 is better supported
 CAIC(m1, m2)
-
-##    df     CAIC
-## m1  4 114591.7
-## m2  3 118225.2
+#    df     CAIC
+# m1  4 114591.7
+# m2  3 118225.2
 
 ## Visualize the reslationships
 plot(m1)
