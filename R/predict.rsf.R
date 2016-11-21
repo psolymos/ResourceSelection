@@ -16,6 +16,7 @@ part = c("avail", "used", "all"), se.fit = FALSE, ...){
             used = which(object$y == 1),
             all = 1:length(object$y))
         rval <- fitted(object)[id]
+        ## fitted gives 'response', need to use linkfun for 'link'
         if (type == "link")
             ## binomial("probit")$linkfun is qnorm
             rval <- binomial(object$link)$linkfun(rval)
