@@ -14,7 +14,7 @@ function (object, type, ...)
         rval <- cov(t(boot))
     } else {
         rval <- matrix(NA, np, np)
-        rval[1:np, 1:np] <- solve(object$results$hessian)
+        rval[1:np, 1:np] <- .solvenear(object$results$hessian)
     }
     rval <- data.matrix(rval)
     cf <- coef(object)

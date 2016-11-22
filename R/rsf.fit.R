@@ -1,5 +1,5 @@
 rsf.fit <-
-function(X, Y, m, link = "logit", B = 99, 
+function(X, Y, m, link = "logit", B = 99,
 inits, method = "Nelder-Mead", control, ...)
 {
     ## internal function for optim
@@ -88,14 +88,14 @@ inits, method = "Nelder-Mead", control, ...)
         ses <- rep(NA, np)
     if (rcond(H) > 1e-06) {
         ## due to negLogLik, we take H^-1 and not -H^-1
-        opvar <- diag(solve(H))
+        opvar <- diag(.solvenear(H))
         if (any(opvar < 0)) {
             opvar[opvar < 0] <- NA
             warning("negative variance values in optim, NAs produced")
         }
         ses <- sqrt(opvar)
     }
-#    ses <- sqrt(diag(solve(results$hessian)))
+#    ses <- sqrt(diag(.solvenear(results$hessian)))
     names(ses) <- nam
     ## optimization with bootstrap (this can be used for boostrap CI)
     if (B > 0) {
@@ -106,7 +106,7 @@ inits, method = "Nelder-Mead", control, ...)
             pbapply::pbsapply(id.boot, function(z) optim(cfs, nll.fun,
                 hessian = FALSE, method = method, control = control, boot = z)$par)
         } else {
-            sapply(id.boot, function(z) optim(cfs, nll.fun, 
+            sapply(id.boot, function(z) optim(cfs, nll.fun,
                 hessian = FALSE, method = method, control = control, boot = z)$par)
         }
         boot.out <- cbind(cfs, boot.out)
@@ -135,7 +135,7 @@ inits, method = "Nelder-Mead", control, ...)
         np = np,
         nobs = N.used,
 #        df.null = N.used - 1,
-#        df.residual = N.used - np, 
+#        df.residual = N.used - np,
         bootstrap = boot.out,
         converged = results$convergence == 0)
     out$fitted.values <- if (link == "log")
