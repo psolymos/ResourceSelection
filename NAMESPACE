@@ -4,6 +4,7 @@ importFrom(stats, BIC,
   logLik, model.matrix, model.frame,
   update.formula, update, vcov, confint,
   fitted)
+importFrom("Matrix", "nearPD")
 importFrom("grDevices", "dev.interactive", "devAskNewPage",
   "terrain.colors")
 importFrom("graphics", "box", "hist", "image", "lines",

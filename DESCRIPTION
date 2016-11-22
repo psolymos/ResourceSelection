@@ -12,7 +12,7 @@ Description: Resource Selection (Probability) Functions
   Lele (2009) <doi:10.2193/2007-535>,
   and Solymos & Lele (2016) <doi:10.1111/2041-210X.12432>.
 Depends: R (>= 2.13.0)
-Imports: MASS, pbapply
+Imports: MASS, pbapply, Matrix
 URL: https://github.com/psolymos/ResourceSelection
 BugReports: https://github.com/psolymos/ResourceSelection/issues
 License: GPL-2
