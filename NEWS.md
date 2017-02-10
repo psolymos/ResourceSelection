@@ -1,8 +1,8 @@
 # ResourceSelection package version history
 
-## Version 0.3-1, Nov 5, 2016
+## Version 0.3-1, Feb 10, 2017
 
-* 
+* New function: `mep` for marginal effect plots.
 
 ## Version 0.3-0, Nov 4, 2016
 
