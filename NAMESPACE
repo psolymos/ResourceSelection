@@ -1,5 +1,5 @@
-export(rsf.fit, rsf, rspf, hoslem.test, CAIC, CAICtable)
-export(kdepairs, makeUsedAvail, simulateUsedAvail)
+export(rsf.fit, rsf, rspf, hoslem.test, CAIC, CAICtable,
+  kdepairs, makeUsedAvail, simulateUsedAvail, mep)
 importFrom(stats, BIC,
   logLik, model.matrix, model.frame,
   update.formula, update, vcov, confint,
@@ -24,6 +24,7 @@ S3method(logLik, rsf)
 S3method(model.frame, rsf)
 S3method(model.matrix, rsf)
 S3method(plot, rsf)
+S3method(mep, default)
 S3method(predict, rsf)
 S3method(vcov, rsf)
 S3method(kdepairs, default)
