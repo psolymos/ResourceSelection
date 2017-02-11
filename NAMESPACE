@@ -1,19 +1,21 @@
 export(rsf.fit, rsf, rspf, hoslem.test, CAIC, CAICtable,
   kdepairs, makeUsedAvail, simulateUsedAvail, mep)
+
 importFrom(stats, BIC,
   logLik, model.matrix, model.frame,
   update.formula, update, vcov, confint,
-  fitted)
-importFrom("Matrix", "nearPD")
-importFrom("grDevices", "dev.interactive", "devAskNewPage",
-  "terrain.colors")
-importFrom("graphics", "box", "hist", "image", "lines",
-  "pairs.default", "par", "plot", "points", "rect", "text")
-importFrom("stats", ".MFclass", ".getXlevels", "AIC", "aggregate",
-  "binomial", "coef", "cor", "cov", "delete.response",
-  "glm.fit", "lowess", "make.link", "model.matrix.default",
-  "model.response", "optim", "pchisq", "pnorm",
-  "printCoefmat", "qnorm", "quantile", "sd", "terms", "xtabs")
+  fitted, density, dnorm, family, runif, splinefun,
+  .MFclass, .getXlevels, AIC, aggregate,
+  binomial, coef, cor, cov, delete.response,
+  glm.fit, lowess, make.link, model.matrix.default,
+  model.response, optim, pchisq, pnorm,
+  printCoefmat, qnorm, quantile, sd, terms, xtabs)
+importFrom(Matrix, nearPD)
+importFrom(grDevices, dev.interactive, devAskNewPage,
+  terrain.colors, rgb)
+importFrom(graphics, box, hist, image, lines,
+  pairs.default, par, plot, points, rect, text)
+
 S3method(print, rsf)
 S3method(summary, rsf)
 S3method(print, summary.rsf)
