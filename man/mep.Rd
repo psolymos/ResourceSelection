@@ -35,7 +35,7 @@ numeric [0, 1], the confidence level required.
   \item{unique, digits}{
 numeric, the number of unique points above which bins are used.
 If the number of unique values is less than or equal to this number,
-unique values are used vithout binning. Unique values are subject to
+unique values are used without binning. Unique values are subject to
 rounding to \code{digits}.
 }
   \item{n, minbucket}{
@@ -49,7 +49,7 @@ color and type of points to be plotted.
 }
   \item{col.lines, lty, lwd}{
 color, type, and width of quantile lines to be plotted.
-The 1st value correspond to the madian, the 2nd value to the upper and lower
+The 1st value correspond to the median, the 2nd value to the upper and lower
 quantiles, respectively.
 }
   \item{ask}{
@@ -72,14 +72,14 @@ value will be used to guess the scaling (identity, log, or logit)
 unless directly supplied via the \code{link} argument.
 
 Fitted values (f(x) = f(x_1,...,x_i,...,x_p); i = 1,...,p) are plotted against x_i.
-The visual display is determined by the type of x_i (unordered factor, ordered
+The visual display is determined by the type of x_i (un-ordered factor, ordered
 factor, unique numeric values, binned numeric values).
 For each unique vale or bin, the median and confidence intervals
 (quantiles corresponding to \code{level}) of f(x) are calculated.
 Binned values are smoothed by \code{\link{lowess}} unless \code{n} < 3.
 
-A jitter is added to factor and unique value types. The jitter
-is calculated based on kernel \code{\link{density}}.
+Jitter is added to factor and unique value types.
+Jitter is calculated based on kernel \code{\link{density}}.
 
 The model frame includes the response variable as well. Plotting f(x)
 as a function of the observations might be a useful visualization too
