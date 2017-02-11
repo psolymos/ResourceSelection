@@ -106,12 +106,20 @@ CAIC(m1, m2)
 # m1  4 114591.7
 # m2  3 118225.2
 
-## Visualize the reslationships
+## Visualize the relationships
 plot(m1)
-kdepairs(m1)
+mep(m1) # marginal effects similar to plot but with CIs
+kdepairs(m1) # 2D kernel density estimates
 plot(m2)
 kdepairs(m2)
+mep(m2)
 ```
+
+#### Marginal effect plots
+
+![](https://github.com/psolymos/ResourceSelection/raw/master/images/goats-mep.png)
+
+#### Scatterplot matrix with 2D kernel density estimates
 
 ![](https://github.com/psolymos/ResourceSelection/raw/master/images/goats-m1.png)
 
