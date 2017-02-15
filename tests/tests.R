@@ -97,3 +97,15 @@ str(fitted(m2))
 
 str(residuals(m1))
 str(residuals(m2))
+
+## test no-selection model
+f <- function(n=100, m=10) {
+    y <- c(rep(1, n), rep(0, n*m))
+    c(data=log(sum(y==1)/sum(y==0)),
+        rsf=rsf.null(y, m=0)$results$par,
+        glm=unname(coef(glm(y ~ 1, family=binomial))))
+
+}
+vals <- expand.grid(n=c(100, 200, 500), m=c(1,10,20))
+tst <- t(apply(vals, 1, function(z) f(z[1], z[2])))
+data.frame(vals, round(tst, 4))
