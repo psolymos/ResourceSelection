@@ -21,7 +21,7 @@ method = "Nelder-Mead", control, model = TRUE, x = FALSE, ...)
 rsf.fit(X, Y, m, link = "logit", B = 99,
 inits, method = "Nelder-Mead", control, ...)
 
-rsf.null(Y, m, ...)
+rsf.null(Y, m, inits, ...)
 }
 \arguments{
   \item{formula}{

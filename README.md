@@ -13,8 +13,16 @@ Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 
 ## Install
 
+CRAN version:
+
 ```R
 install.packages("ResourceSelection")
+```
+
+Development version:
+
+```R
+devtools::install_github("psolymos/ResourceSelection")
 ```
 
 User visible changes in the package are listed in the [NEWS](https://github.com/psolymos/ResourceSelection/blob/master/NEWS.md) file.
