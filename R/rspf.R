@@ -58,7 +58,7 @@ model = TRUE, x = FALSE, ...)
         x= if (x) X else NULL)
     out <- c(out1, out2)
     linkinvfun <- binomial(link=make.link(link))$linkinv
-    out$fitted.values <- linkinvfun(drop(X %*%(out1$coefficients))
+    out$fitted.values <- linkinvfun(drop(X %*%(out1$coefficients)))
     ## defining object class
     class(out) <- c("rspf", "rsf")
     out
