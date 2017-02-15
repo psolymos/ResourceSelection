@@ -1,5 +1,5 @@
 export(rsf.fit, rsf, rspf, hoslem.test, CAIC, CAICtable,
-  kdepairs, makeUsedAvail, simulateUsedAvail, mep)
+  kdepairs, makeUsedAvail, simulateUsedAvail, mep, rsf.null)
 
 importFrom(stats, BIC,
   logLik, model.matrix, model.frame,
