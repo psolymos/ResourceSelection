@@ -1,5 +1,9 @@
 # ResourceSelection package version history
 
+## Version 0.3-2, Feb 15, 2017
+
+* New function: `rsf.null` for fitting 'no selection' RSF model.
+
 ## Version 0.3-1, Feb 10, 2017
 
 * New function: `mep` for marginal effect plots.
