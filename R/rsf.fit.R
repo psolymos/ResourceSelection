@@ -4,8 +4,6 @@ inits, method = "Nelder-Mead", control, ...)
 {
     ## internal function for optim
     nll.fun <- function(parms, boot=id.all) {
-        if (link == "log")
-            parms <- c(0, parms)
         P.used <- drop(linkinvfun(X.used %*% parms))
         P.avail1 <- drop(linkinvfun(X.avail %*% parms))
         if (is.null(m.avail)) {
