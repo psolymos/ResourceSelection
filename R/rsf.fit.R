@@ -13,9 +13,6 @@ inits, method = "Nelder-Mead", control, ...)
         } else {
             P.avail <- aggregate(P.avail1, list(m.avail), sum)
             P.avail <- P.avail[match(m.used, P.avail$Group),2]
-#            P.avail <- sapply(m.avail, function(z) sum(P.avail1[m.avail==z]))
-#            dim(P.avail1) <- c(m, length(P.avail1) / m)
-#            P.avail <- colSums(P.avail1)
         }
         ll.vec <- log(pmax(P.used / (P.used + P.avail), .Machine$double.eps))
         -sum(ll.vec[boot])
@@ -33,12 +30,14 @@ inits, method = "Nelder-Mead", control, ...)
         inits <- suppressWarnings(glm.fit(X, Y, family=binomial())$coef)
         inits[is.na(inits)] <- 0
     }
-    ## handling Exponential case
     np <- ncol(X)
-    if (link == "log" && length(inits) > np-1)
-        inits <- inits[-1]
-    if (link == "log")
-        np <- np - 1
+
+    ## handling Exponential case
+#    if (link == "log" && length(inits) > np-1)
+#        inits <- inits[-1]
+#    if (link == "log")
+#        np <- np - 1
+
     nam <- colnames(X)[(ncol(X)+1-np):ncol(X)]
     ## objects needed for optim
     X.used <- data.matrix(X[Y==1,])
@@ -70,13 +69,9 @@ inits, method = "Nelder-Mead", control, ...)
         m.avail <- m[Y==0]
     }
 
-## not needed any more
-#    ones.m <- if (m == 0)
-#        data.matrix(rep(1, N.avail)) else data.matrix(rep(1, m))
-#    nll.fun <- if (matched)
-#        nll.matched else nll.nonmatched
     ## optimization, point estimates
-    results <- optim(inits, nll.fun, method = method, hessian = TRUE, control = control, boot = id.all)
+    results <- suppressWarnings(optim(inits, nll.fun, method = method,
+        hessian = TRUE, control = control, boot = id.all))
     ## log likelihood
     ll <- -results$value
     ## point estimates
@@ -95,7 +90,6 @@ inits, method = "Nelder-Mead", control, ...)
         }
         ses <- sqrt(opvar)
     }
-#    ses <- sqrt(diag(.solvenear(results$hessian)))
     names(ses) <- nam
     ## optimization with bootstrap (this can be used for boostrap CI)
     if (B > 0) {
@@ -103,25 +97,24 @@ inits, method = "Nelder-Mead", control, ...)
             sample(1:N.used, N.used, replace=TRUE))
         ## parallel computation can be added here
         boot.out <- if (requireNamespace("pbapply")) {
-            pbapply::pbsapply(id.boot, function(z) optim(cfs, nll.fun,
-                hessian = FALSE, method = method, control = control, boot = z)$par)
+            pbapply::pbsapply(id.boot, function(z) suppressWarnings(optim(cfs, nll.fun,
+                hessian = FALSE, method = method, control = control, boot = z))$par)
         } else {
-            sapply(id.boot, function(z) optim(cfs, nll.fun,
-                hessian = FALSE, method = method, control = control, boot = z)$par)
+            sapply(id.boot, function(z) suppressWarnings(optim(cfs, nll.fun,
+                hessian = FALSE, method = method, control = control, boot = z))$par)
         }
         boot.out <- cbind(cfs, boot.out)
     } else boot.out <- NULL
 
-    ## return value assembly
-#    if (link=="log") {
-#        cfs2 <- cfs[-1]
-#        ses2 <- ses[-1]
+    ## handling Exponential case: happens in rsf()
+#    if (link == "log") {
+#        cfs <- cfs[-1]
+#        ses <- ses[-1]
 #        np <- np - 1
 #        boot.out <- boot.out[-1,,drop=FALSE]
-#    } else {
-#        cfs2 <- cfs
-#        ses2 <- ses
 #    }
+
+    ## return value assembly
     out <- list(call = match.call(),
         y = Y,
         coefficients = cfs,
@@ -134,11 +127,9 @@ inits, method = "Nelder-Mead", control, ...)
         m = m,
         np = np,
         nobs = N.used,
-#        df.null = N.used - 1,
-#        df.residual = N.used - np,
         bootstrap = boot.out,
         converged = results$convergence == 0)
-    out$fitted.values <- if (link == "log")
-        exp(drop(X %*% c(0, cfs))) else linkinvfun(drop(X %*% cfs))
+#    out$fitted.values <- if (link == "log")
+#        exp(drop(X %*% c(0, cfs))) else linkinvfun(drop(X %*% cfs))
     out
 }

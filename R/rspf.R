@@ -25,17 +25,17 @@ model = TRUE, x = FALSE, ...)
     if (length(Y) < 1)
         stop("empty model")
     if (all(Y > 0))
-        stop("invalid dependent variable, no zero value")
+        stop("invalid indicator variable, no zero value")
     if (!isTRUE(all.equal(as.vector(Y), as.integer(round(Y +
         0.001)))))
-        stop("invalid dependent variable, non-integer values")
+        stop("invalid indicator variable, non-integer values")
     Y <- as.integer(round(Y + 0.001))
     if (any(Y < 0))
-        stop("invalid dependent variable, negative counts")
+        stop("invalid indicator variable, negative counts")
     if (any(!(Y %in% c(0, 1))))
-        stop("invalid dependent variable, not in c(0, 1)")
+        stop("invalid indicator variable, not in c(0, 1)")
     if (length(Y) != NROW(X))
-        stop("invalid dependent variable, not a vector")
+        stop("invalid indicator variable, not a vector")
     ## need to have covariates (i.e. not only intercept)
     ## and there needs to have at least one non-discrete one among covariates
     if (identical(as.character(ff[[2]]), "1"))
@@ -57,6 +57,8 @@ model = TRUE, x = FALSE, ...)
         model= if (model) mf else NULL,
         x= if (x) X else NULL)
     out <- c(out1, out2)
+    linkinvfun <- binomial(link=make.link(link))$linkinv
+    out$fitted.values <- exp(drop(X %*% linkinvfun(out1$coefficients)))
     ## defining object class
     class(out) <- c("rspf", "rsf")
     out
