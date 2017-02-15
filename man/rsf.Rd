@@ -2,6 +2,7 @@
 \alias{rsf.fit}
 \alias{rsf}
 \alias{rspf}
+\alias{rsf.null}
 \title{
 Resource Selection (Probability) Functions for Use-Availability Data
 }
@@ -19,6 +20,8 @@ method = "Nelder-Mead", control, model = TRUE, x = FALSE, ...)
 
 rsf.fit(X, Y, m, link = "logit", B = 99,
 inits, method = "Nelder-Mead", control, ...)
+
+rsf.null(Y, m, ...)
 }
 \arguments{
   \item{formula}{
@@ -76,6 +79,9 @@ The \code{rspf} function fits the Resource Selection Probability Function
 The \code{rsf.fit} is the workhorse behind the two functions.
 \code{link="log"} leads to Exponential RSF.
 
+The \code{rsf.null} function fits the 'no selection' version
+of the Exponential Resource Selection Function (RSF) model to presence only data.
+
 LHS of the \code{formula} data must be binary, ones indicating used locations,
 while zeros indicating available location.
 
@@ -102,14 +108,14 @@ For model description and estimation details, see Lele and Keim (2006),
 Lele (2009), and Solymos and Lele (2016).
 }
 \value{
-A list with class \code{"rsf"} or \code{"rspf"}
+A list with class \code{"rsf"}, \code{"rsf.null"}, or \code{"rspf"}
 containing the following components:
   \item{call}{the matched call.}
   \item{y}{vector from LHS of the formula.}
   \item{coefficients}{a named vector of coefficients.}
   \item{std.error}{a named vector of standard errors
-    for the coefficients}
-  \item{loglik}{the maximized log-likelihood}
+    for the coefficients.}
+  \item{loglik}{the maximized pseudo log-likelihood acording to Lele 2009.}
   \item{results}{\code{\link{optim}} results.}
   \item{link}{character, value of the link function used.}
   \item{control}{control parameters for \code{\link{optim}}.}
@@ -148,6 +154,8 @@ Methods in Ecology and Evolution 7, 196--205.
 Subhash R. Lele, Jonah L. Keim, Peter Solymos
 }
 \examples{
+## --- Simulated data example ---
+
 ## settings
 n.used <- 1000
 m <- 10
@@ -163,5 +171,40 @@ summary(m1)
 dat2 <- simulateUsedAvail(x, cfs, n.used, m, link="logit")
 m2 <- rspf(status ~ .-status, dat2, m=0, B=0)
 summary(m2)
+
+## --- Real data analysis from Lele & Keim 2006 ---
+
+\dontrun{
+goats$exp.HLI <- exp(goats$HLI)
+goats$sin.SLOPE <- sin(pi * goats$SLOPE / 180)
+goats$ELEVATION <- scale(goats$ELEVATION)
+goats$ET <- scale(goats$ET)
+goats$TASP <- scale(goats$TASP)
+
+## Fit two RSPF models:
+## global availability (m=0) and bootstrap (B=99)
+m1 <- rspf(STATUS ~ TASP + sin.SLOPE + ELEVATION, goats, m=0, B = 99)
+m2 <- rspf(STATUS ~ TASP + ELEVATION, goats, m=0, B = 99)
+
+## Inspect the summaries
+summary(m1)
+summary(m2)
+
+## Compare models: looks like m1 is better supported
+CAIC(m1, m2)
+
+## Visualize the relationships
+plot(m1)
+mep(m1) # marginal effects similar to plot but with CIs
+kdepairs(m1) # 2D kernel density estimates
+plot(m2)
+kdepairs(m2)
+mep(m2)
+
+## fit and compare to null RSF model (not available for RSPF)
+m3 <- rsf(STATUS ~ TASP + ELEVATION, goats, m=0, B = 0)
+m4 <- rsf.null(Y=goats$STATUS, m=0)
+CAIC(m3, m4)
+}
 }
 \keyword{ htest }
