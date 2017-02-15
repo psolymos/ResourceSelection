@@ -29,11 +29,13 @@ dat2 <- simulateUsedAvail(x, cfs, n.used, m, link="logit")
 m2 <- rspf(status ~ .-status, dat2, m=0, B=0)
 m2b <- rspf(status ~ .-status, dat2, m=0, B=9)
 
+print(m0)
 print(m1)
 print(m1b)
 print(m2)
 print(m2b)
 
+summary(m0)
 summary(m1)
 summary(m1b)
 summary(m2)
@@ -41,9 +43,11 @@ summary(m2b)
 
 CAIC(m0, m1, m2)
 
+coef(m0)
 coef(m1)
 coef(m2)
 
+vcov(m0)
 vcov(m1)
 vcov(m1b)
 vcov(m2)
@@ -74,6 +78,7 @@ str(predict(m2b, se.fit = TRUE))
 str(predict(m1b, se.fit = TRUE, newdata = dat1))
 str(predict(m2b, se.fit = TRUE, newdata = dat1))
 
+confint(m0)
 confint(m1)
 confint(m1b)
 confint(m2)

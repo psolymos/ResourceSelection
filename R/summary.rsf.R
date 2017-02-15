@@ -1,5 +1,5 @@
 summary.rsf <-
-function (object, type, ...) 
+function (object, type, ...)
 {
     boot <- object$bootstrap
     if (missing(type)) {
@@ -23,7 +23,7 @@ function (object, type, ...)
     coefs <- cbind(coefs, se, tstat, pval)
 #    colnames(coefs) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
     colnames(coefs) <- c("Estimate", "Std. Error", "z value", "Pr(>|z|)")
-    coefs <- coefs[1:k, , drop = FALSE]
+    coefs <- coefs[seq_len(k), , drop = FALSE]
     rownames(coefs) <- names(coef(object))
 
     if (identical(object$m, 0)) {

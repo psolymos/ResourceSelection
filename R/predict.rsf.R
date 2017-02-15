@@ -1,6 +1,8 @@
 predict.rsf <-
 function(object, newdata = NULL, type = c("link", "response"),
 part = c("avail", "used", "all"), se.fit = FALSE, ...){
+    if (inherits(object, "rsf.null"))
+        stop("predict not available for rsf.null (no selection)")
     type <- match.arg(type)
     part <- match.arg(part)
     if (se.fit) {
