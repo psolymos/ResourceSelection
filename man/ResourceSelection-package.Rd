@@ -17,6 +17,9 @@ Lele and Keim (2006), Lele (2009), and Solymos & Lele (2016).
 \code{\link{rspf}}: Resource Selection Probability Functions (RSPF)
 
 \code{\link{hoslem.test}}: Hosmer-Lemeshow Goodness of Fit (GOF) Test
+
+Visual summaries: \code{\link{kdepairs}} for 2D scatterplots and
+\code{\link{mep}} for marginal effect plots based on fitted model objects.
 }
 \author{
 Subhash R. Lele, Jonah L. Keim, Peter Solymos
@@ -42,5 +45,6 @@ Methods in Ecology and Evolution 7, 196--205.
 }
 \keyword{ package }
 \seealso{
-\code{\link{rsf}}, \code{\link{rspf}}, \code{\link{kdepairs}}, \code{\link{hoslem.test}}
+\code{\link{rsf}}, \code{\link{rspf}}, \code{\link{kdepairs}}, \code{\link{mep}},
+\code{\link{hoslem.test}}
 }
