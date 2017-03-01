@@ -1,5 +1,9 @@
 # ResourceSelection package version history
 
+## Version 0.3-3, Mar 1, 2017
+
+*
+
 ## Version 0.3-2, Feb 28, 2017
 
 * New function: `rsf.null` for fitting 'no selection' RSF model.
