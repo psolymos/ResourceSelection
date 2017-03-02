@@ -33,13 +33,20 @@ kdepairs.default <- function(x, n=25, density=TRUE, contour=TRUE, ...) {
             round(COR, 3), cex=1+abs(COR))
     }
     panel.hist <- function(x, ...) {
-        usr <- par("usr"); on.exit(par(usr))
+        usr <- par("usr")
+        on.exit(par(usr))
         par(usr = c(usr[1:2], 0, 1.5) )
-        h <- hist(x, plot = FALSE)
-        breaks <- h$breaks; nB <- length(breaks)
-        y <- h$counts; y <- y/max(y)
+        h <- hist(x, plot=FALSE)
+        breaks <- h$breaks
+        nB <- length(breaks)
+        #y <- h$counts
+        y <- h$density
+        Max <- max(y)
+        y <- y/Max
         rect(breaks[-nB], 0, breaks[-1], y, col="gold", border="orange", ...)
-        lines(density(x))
+        den <- density(x)
+        den$y <- den$y/Max
+        lines(den)
         box()
     }
     pairs.default(y, lower.panel=fun.lower, upper.panel=fun.upper, diag.panel=panel.hist)
