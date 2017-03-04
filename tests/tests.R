@@ -43,6 +43,9 @@ summary(m2b)
 
 CAIC(m0, m1, m2)
 
+family(m1)
+family(m2)
+
 coef(m0)
 coef(m1)
 coef(m2)
