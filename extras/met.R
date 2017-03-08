@@ -77,6 +77,7 @@ library(ResourceSelection)
 data(goats)
 
 ## nonparametric estimate
+elev <- goats$ELEVATION
 elev <- drop(scale(goats$ELEVATION))
 elev2 <- elev^2
 elev3 <- elev^3
@@ -121,3 +122,20 @@ lines(fA$x, tsnp, col=3)
 
 par(mfrow=c(1,1))
 
+x <- cut(goats$ELEVATION, c(200, seq(400, 2000, by=200)))
+table(x,goats$STATUS,useNA="a")
+
+m1 <- rsf(STATUS ~ x + SLOPE + ASPECT, goats, m=0, B=0)
+fit <- fitted(m1)
+y <- goats$STATUS
+
+meds <- aggregate(data.frame(fit=fit), list(x=x), median)
+tab1 <- table(x=x, y=y)
+tab1 <- t(t(tab1)/colSums(tab1))
+
+sp <- meds$fit
+snp <- tab1[,"1"]/tab1[,"0"]
+tsnp <- mean(sp) * snp / mean(snp)
+
+plot(1:nlevels(x), sp, type="b", ylim=range(sp, tsnp))
+lines(1:nlevels(x), tsnp, col=2)
