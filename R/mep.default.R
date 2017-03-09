@@ -55,7 +55,7 @@ subset=NULL, ylab, ...)
             xlab=nam, ylab=ylab,
             n=n, minbucket=minbucket, digits=digits,
             col.points=col.points, col.lines=col.lines,
-            pch=pch, lty=lty, lwd=lwd, ...)
+            pch=pch, lty=lty, lwd=lwd, plot=TRUE, ...)
     }
     invisible(out)
 }
