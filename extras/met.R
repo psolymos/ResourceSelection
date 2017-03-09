@@ -1,77 +1,118 @@
 ## marginal effects test (met)
 
+## todo: use loess and predict.loess to smooth fitted values
+
 .met <-
 function(x, y, fit, link="log",
-n=512, kernel="gaussian", bw="nrd0", fade=0.05, ...)
+n=512, kernel="gaussian", bw="nrd0",
+plot=TRUE, xlab, ylab, ...)
 {
     ok <- !is.na(x) & !is.na(y) & !is.na(fit)
     x <- x[ok]
     y <- y[ok]
     fit <- fit[ok]
 
-    o <- order(x, na.last = TRUE)
-    used <- y > 0
-    x <- x[o]
-    y <- y[o]
-    fit <- fit[o]
+    if (is.factor(x)) {
+        if (any(table(x) < 1))
+            stop("all levels must have >0 frequency")
 
-    int <- range(x)
-    p <- rank(x, ties.method="average") / (length(x) + 1)
+        meds <- aggregate(data.frame(fit=fit), list(x=x), median)
+        tab1 <- table(x=x, y=y)
+        tab1 <- t(t(tab1)/colSums(tab1))
 
-    fA <- density(x[y==0], bw=bw,
-        kernel=kernel, n=n, from=int[1], to=int[2], ...)
-    fU <- density(x[y==1], bw=fA$bw,
-        kernel=kernel, n=n, from=int[1], to=int[2], ...)
+        sp <- meds$fit
+        snp <- tab1[,"1"]/tab1[,"0"]
+        snp <- binomial(link)$linkinv(log(snp))
+        tsnp <- mean(sp) * snp / mean(snp)
 
-    incr <- (fA$x[length(fA$x)]-fA$x[1])/n
-    C <- cut(x, c(fA$x[1]-0.5*incr, fA$x+0.5*incr))
+        xx <- x[seq_len(nlevels(x))]
+        xx[] <- levels(x)
+        out <- data.frame(x=xx,
+            fA=tab1[,"0"], fU=tab1[,"1"],
+            s=snp, sx=tsnp, y=sp, F=NA)
 
-    ## need to smooth the tails
-    pp <- aggregate(data.frame(p=p), list(C=C), max)
-    F <- pp[match(levels(C), pp[,"C"]),"p"]
-    F[is.na(F)] <- approxfun(fA$x[!is.na(F)], F[!is.na(F)])(fA$x[is.na(F)])
+    } else {
 
-    #snp <- (w*fU$y + (1-w)*fA$y) / fA$y
+        o <- order(x, na.last = TRUE)
+        used <- y > 0
+        x <- x[o]
+        y <- y[o]
+        fit <- fit[o]
 
-    ## nonparametric
-    snp <- fU$y / fA$y
-    snp <- binomial(link)$linkinv(log(snp))
+        int <- range(x)
+        p <- rank(x, ties.method="average") / (length(x) + 1)
 
-    ## parametruc fit medians MEP
-    meds <- aggregate(data.frame(fit=fit), list(C=C), median)
-    sp <- meds[match(levels(C), meds[,"C"]),"fit"]
-    sp[is.na(sp)] <- approxfun(fA$x[!is.na(sp)], sp[!is.na(sp)])(fA$x[is.na(sp)])
+        fA <- density(x[y==0], bw=bw,
+            kernel=kernel, n=n, from=int[1], to=int[2], ...)
+        fU <- density(x[y==1], bw=fA$bw,
+            kernel=kernel, n=n, from=int[1], to=int[2], ...)
 
-#    j <- which(pp$p>=0.5)[1]
-#    tsnp <- sp[j] * snp / snp[j]
-    tsnp <- mean(sp) * snp / mean(snp)
+        incr <- (fA$x[length(fA$x)]-fA$x[1])/n
+        C <- cut(x, c(fA$x[1]-0.5*incr, fA$x+0.5*incr))
 
-    out <- data.frame(x=fA$x, fA=fA$y, fU=fU$y,
-        s=snp, sx=tsnp, y=sp, F=F)
-    attr(out, "bw") <- bw
-    attr(out, "kernel") <- kernel
-    out
+        ## need to smooth the tails
+        pp <- aggregate(data.frame(p=p), list(C=C), max)
+        F <- pp[match(levels(C), pp[,"C"]),"p"]
+        F[is.na(F)] <- approxfun(fA$x[!is.na(F)], F[!is.na(F)])(fA$x[is.na(F)])
+
+        #snp <- (w*fU$y + (1-w)*fA$y) / fA$y
+
+        ## nonparametric
+        snp <- fU$y / fA$y
+        snp <- binomial(link)$linkinv(log(snp))
+
+        ## parametruc fit medians MEP
+#        meds <- aggregate(data.frame(fit=fit), list(C=C), median)
+#        sp <- meds[match(levels(C), meds[,"C"]),"fit"]
+#        sp[is.na(sp)] <- approxfun(fA$x[!is.na(sp)], sp[!is.na(sp)])(fA$x[is.na(sp)])
+        spm <- loess(fit ~ x)
+        sp <- predict(spm, data.frame(x=fA$x))
+
+    #    j <- which(pp$p>=0.5)[1]
+    #    tsnp <- sp[j] * snp / snp[j]
+        tsnp <- mean(sp) * snp / mean(snp)
+
+        out <- data.frame(x=fA$x, fA=fA$y, fU=fU$y,
+            s=snp, sx=tsnp, y=sp, F=F)
+        attr(out, "bw") <- bw
+        attr(out, "kernel") <- kernel
+
+        if (FALSE) {
+            if (missing(ylab))
+                ylab <- "y"
+            if (missing(xlab))
+                xlab <- "x"
+            fade <- 0.05
+            w <- pmin(1/(1+exp(-50*(out$F-fade/2))),
+                1/(1+exp(-50*((1-out$F)-fade/2))))
+
+            h <- diff(range(out$y, out$sx)) * 0.01
+            d <- sqrt(abs(out$y - out$sx))
+            Col <- terrain.colors(100)[floor(99 * d / max(d)) + 1]
+
+            plot(out$x, out$y, type="n", ylim=range(out$y, out$sx),
+                ylab=ylab, xlab=ylab, ...)
+            for (i in 1:(n-1))
+                lines(out$x[c(i,i+1)],
+                    out$sx[c(i,i+1)],
+                    #col=Col[i],
+                    lwd=w[i]*3+0.5)
+            lines(out$x, out$y, col=2, lwd=2)
+        }
+    }
+    if (plot) {
+        if (missing(ylab))
+            ylab <- "y"
+        if (missing(xlab))
+            xlab <- "x"
+        plot(out$x, out$y, type="n",
+            ylim=range(out$y, out$sx), ylab=ylab, xlab=xlab, ...)
+        lines(out$x, out$sx, col=4, lwd=2)
+        lines(out$x, out$y, col=2, lwd=2)
+    }
+    invisible(out)
 }
 
-plot_met <- function(x, fade=0.05, ...) {
-
-    w <- pmin(1/(1+exp(-50*(x$F-fade/2))),
-        1/(1+exp(-50*((1-x$F)-fade/2))))
-
-    h <- diff(range(x$y, x$sx)) * 0.01
-    d <- sqrt(abs(x$y - x$sx))
-    Col <- terrain.colors(100)[floor(99 * d / max(d)) + 1]
-
-    plot(x$x, x$y, type="n", ylim=range(x$y, x$sx),
-        ylab="y", xlab="x", ...)
-    for (i in 1:(n-1))
-        lines(x$x[c(i,i+1)],
-            x$sx[c(i,i+1)],
-            col=Col[i],
-            lwd=w[i]*3+0.5)
-    lines(x$x, x$y, col=2, lwd=2)
-    invisible(x)
-}
 
 library(ResourceSelection)
 data(goats)
@@ -128,6 +169,9 @@ table(x,goats$STATUS,useNA="a")
 m1 <- rsf(STATUS ~ x + SLOPE + ASPECT, goats, m=0, B=0)
 fit <- fitted(m1)
 y <- goats$STATUS
+
+.met(x, goats$STATUS, fitted(m1), m1$link)
+
 
 meds <- aggregate(data.frame(fit=fit), list(x=x), median)
 tab1 <- table(x=x, y=y)
