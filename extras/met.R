@@ -3,6 +3,84 @@
 ## todo: use loess and predict.loess to smooth fitted values
 
 .met <-
+function(yobs, yfit, xobs, xfit, LINKINV,
+n=512, kernel="gaussian", bw="nrd0",
+plot=TRUE, xlab, ylab, ...)
+{
+    if (missing(xfit))
+        xfit <- xobs
+    ok1 <- !is.na(xobs) & !is.na(yobs)
+    xobs <- xobs[ok1]
+    yobs <- yobs[ok1]
+    ok2 <- !is.na(xfit) & !is.na(yfit)
+    xfit <- xfit[ok2]
+    yfit <- yfit[ok2]
+    if (missing(LINKINV))
+        LINKINV <- binomial("log")$linkinv
+
+    if (is.factor(xobs)) {
+        if (!all(levels(xobs) == levels(xfit)))
+            stop("xobs and xfit levels must be the same")
+        if (any(table(xobs) < 1))
+            stop("all levels in xobs must have >0 frequency")
+        if (any(table(xfit) < 1))
+            stop("all levels in xfit must have >0 frequency")
+
+        tabA <- table(x=xobs, y=yobs)
+        tabA <- t(t(tabA) / colSums(tabA))
+
+        ## mean or median?
+        sp <- aggregate(data.frame(y=yfit), list(x=xfit), mean)$y
+        snp <- LINKINV(log(tabA[,"1"] / tabA[,"0"]))
+        tsnp <- mean(sp) * snp / mean(snp)
+
+        xx <- x[seq_len(nlevels(x))]
+        xx[] <- levels(x)
+        out <- data.frame(x=xx,
+            sobs=tsnp, sfit=sp,
+            fA=tabA[,"0"], fU=tabA[,"1"])
+
+    } else {
+
+        int <- range(xobs, xfit)
+
+        fA <- density(xobs[yobs==0], bw=bw,
+            kernel=kernel, n=n, from=int[1], to=int[2], ...)
+        fU <- density(xobs[yobs==1], bw=fA$bw,
+            kernel=kernel, n=n, from=int[1], to=int[2], ...)
+
+        sp <- predict(loess(yfit ~ xfit), data.frame(xfit=fA$x))
+        snp <- LINKINV(log(fU$y / fA$y))
+        tsnp <- mean(sp) * snp / mean(snp)
+
+        out <- data.frame(x=fA$x,
+            sobs=tsnp, sfit=sp,
+            fA=fA$y, fU=fU$y)
+        attr(out, "bw") <- bw
+        attr(out, "kernel") <- kernel
+
+    }
+    if (plot) {
+        if (missing(ylab))
+            ylab <- "y"
+        if (missing(xlab))
+            xlab <- "x"
+        plot(out$x, out$sobs, type="n", col="white",
+            ylim=range(out$sobs, out$sfit), ylab=ylab, xlab=xlab, ...)
+        lines(out$x, out$sobs, col=4, lwd=2)
+        lines(out$x, out$sfit, col=2, lwd=2)
+    }
+    invisible(out)
+}
+
+## todo:
+## - figure out Gaussian version
+## - implement method for rsf/rspf, Poisson/Binomial
+## - think about NB, ZIP/ZINB
+
+
+
+.met2 <-
 function(x, y, fit, link="log",
 n=512, kernel="gaussian", bw="nrd0",
 plot=TRUE, xlab, ylab, ...)
@@ -170,7 +248,9 @@ m1 <- rsf(STATUS ~ x + SLOPE + ASPECT, goats, m=0, B=0)
 fit <- fitted(m1)
 y <- goats$STATUS
 
-.met(x, goats$STATUS, fitted(m1), m1$link)
+.met(goats$STATUS, fitted(m1), x, LINKINV=binomial(m1$link)$linkinv)
+.met(goats$STATUS, fitted(m1), goats$SLOPE, LINKINV=binomial(m1$link)$linkinv)
+.met(goats$STATUS, fitted(m1), goats$ASPECT, LINKINV=binomial(m1$link)$linkinv)
 
 
 meds <- aggregate(data.frame(fit=fit), list(x=x), median)
