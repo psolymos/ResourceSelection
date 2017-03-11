@@ -107,6 +107,69 @@ plot=TRUE, dmin=0, xlab, ylab, ...)
 .met_gauss <- function(yobs, yfit, x, ...)
     .met(yobs, yfit, x, x, wtd=FALSE, ...)
 
+meptest <- function (object, ...)
+    UseMethod("meptest")
+
+meptest.default <-
+function(object, which=NULL, ask, ylab, subset=NULL, ...)
+{
+    mf <- model.frame(object)
+    fit <- fitted(object)
+    Terms <- attr(mf, "terms")
+    i_resp <- attr(Terms, "response")
+    vars <- attr(Terms, "dataClasses")[-i_resp]
+    y <- mf[,i_resp]
+    uv <- unique(y)
+    ruv <- round(uv)
+    FUN <- .met_gauss
+    sum_pos <- sum(y) > 0
+    is_count <- isTRUE(all.equal(as.vector(y),
+        as.integer(round(y + 0.001))))
+    is_nonneg <- all(y >= 0)
+    is_binary <- isTRUE(all.equal(as.vector(c(0, 1)),
+        sort(as.integer(round(unique(y) + 0.001)))))
+    if (is_count && is_nonneg && sum_pos)
+        FUN <- .met_pois
+    if (is_count && is_nonneg && sum_pos && is_binary)
+        FUN <- .met_binom
+    if (!is.null(subset)) {
+        mf <- mf[subset,,drop=FALSE]
+        fit <- fit[subset]
+        y <- y[subset]
+    }
+    if (is.null(which))
+        which <- names(vars)
+    which <- if (is.character(which)) {
+        which[match(names(vars), which)]
+    } else {
+        names(vars)[which]
+    }
+    which <- which[!is.na(which)]
+    vars <- vars[which]
+    np <- length(vars)
+    if (np < 1)
+        stop("must define at least one variable")
+    if (missing(ask))
+        ask <- prod(par("mfcol")) < np && dev.interactive()
+    if (ask) {
+        oask <- devAskNewPage(TRUE)
+        on.exit(devAskNewPage(oask))
+    }
+    out <- list()
+    if (missing(ylab))
+        ylab <- "response"
+    for (i in seq_len(np)) {
+        nam <- names(vars)[i]
+        out[[nam]] <- FUN(y, fit, mf[,nam],
+            ylab=ylab, xlab=nam, ...)
+    }
+    invisible(out)
+}
+
+## default method:
+## similar to mep.default: guesses type and goes over x
+## specific methods need to do better: rsf, glm, lm
+
 ## grey=fA
 ## pink=fU
 ## blue=non-parametric fit
@@ -134,6 +197,8 @@ mod <- rspf(status ~ .-status, dat, m=0, B=0)
 .met_binom(dat$status, fitted(mod), dat$x2)
 #.met_binom(dat$status, fitted(mod), dat$x4)
 
+mod <- glm(status ~ .-status, dat, family=binomial)
+
 ## poisson
 
 lam <- exp(model.matrix(~.,x) %*% cfs)
@@ -157,4 +222,10 @@ mod <- lm(y ~ ., x)
 .met_gauss(y, fitted(mod), x$x1)
 .met_gauss(y, fitted(mod), x$x2)
 #.met_gauss(y, fitted(mod), x$x4)
+
+## response
+model.frame(mod)[,attr(terms(mod), "response")]
+
+## similar functions
+dismo::response
 
