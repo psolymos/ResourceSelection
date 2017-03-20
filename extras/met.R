@@ -2,7 +2,76 @@
 
 library(ResourceSelection)
 
+.get_met <- function(y, x, int,
+wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
+{
+    xcat <- is.factor(x)
+    if (missing(int))
+        int <- range(x)
+    if (xcat) {
+        if (wtd) {
+            tabA <- table(x=x, y=y)
+            tabA <- t(t(tabA) / colSums(tabA))
+            s <- tabA[,"1"] / tabA[,"0"]
+            fA <- tabA[,"0"]
+            fU <- tabA[,"1"]
+        } else {
+            s <- aggregate(data.frame(y=y), list(x=x), mean)$y
+            fA <- NA
+            fU <- NA
+        }
+        xx <- x[seq_len(nlevels(x))]
+        xx[] <- levels(x)
+    } else {
+        if (wtd) {
+            fA <- density(x[y==0], bw=bw,
+                kernel=kernel, n=n, from=int[1], to=int[2], ...)
+            fU <- density(x[y==1], bw=fA$bw,
+                kernel=kernel, n=n, from=int[1], to=int[2], ...)
+            s <- fU$y / fA$y
+            xx <- fA$x
+            fA <- fA$y
+            fU <- fU$y
+        } else {
+            xx <- seq(int[1], int[2], len=n)
+            s <- predict(loess(y ~ x), data.frame(x=xx))
+            fA <- NA
+            fU <- NA
+        }
+    }
+    data.frame(x=xx, s=s, fA=fA, fU=fU)
+}
+
 .met <-
+function(yobs, yfit, xobs, xfit,
+B=0, wtd=TRUE,
+n=512, kernel="gaussian", bw="nrd0", ...)
+{
+    if (missing(xfit))
+        xfit <- xobs
+    int <- range(xobs, xfit)
+    fit <- .get_met(yfit, xfit, int=int,
+        wtd=FALSE, n=n, kernel=kernel, bw=bw, ...)
+    obs <- .get_met(yobs, xobs, int=int,
+        wtd=wtd, n=n, kernel=kernel, bw=bw, ...)
+    L <- NULL
+    if (B > 0) {
+        N <- length(xobs)
+        ## need to make sure categories are represented
+        BB <- replicate(B, sample.int(N, N, replace=TRUE))
+        L <- sapply(seq_len(B), function(i, ...) {
+            .get_met(yobs[BB[,i]], xobs[BB[,i]],
+                int=int, wtd=wtd, n=n, kernel=kernel, bw=bw, ...)$s
+        })
+    }
+    Q <- t(apply(cbind(obs$s, L), 1, quantile, probs=c(0.25, 0.5, 0.75)))
+    colnames(Q) <- c("Q1", "Q2", "Q3")
+    out <- list(fit=fit, obs=obs, Q=Q, ymean=mean(yobs))
+}
+
+
+
+.met_old <-
 function(yobs, yfit, xobs, xfit,
 wtd=TRUE, scale=c("y", "x"),
 n=512, kernel="gaussian", bw="nrd0",
