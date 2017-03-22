@@ -28,13 +28,18 @@ wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
                 kernel=kernel, n=n, from=int[1], to=int[2], ...)
             fU <- density(x[y==1], bw=fA$bw,
                 kernel=kernel, n=n, from=int[1], to=int[2], ...)
+            fA$y[fA$y == 0] <- .Machine$double.eps
             s <- fU$y / fA$y
             xx <- fA$x
             fA <- fA$y
             fU <- fU$y
         } else {
             xx <- seq(int[1], int[2], len=n)
-            s <- predict(loess(y ~ x), data.frame(x=xx))
+            Ctrl <- loess.control(statistics="none",
+                surface = "interpolate", #"direct"
+                trace.hat="approximate")
+            lss <- loess(y ~ x, control=Ctrl)
+            s <- predict(lss, data.frame(x=xx))
             fA <- NA
             fU <- NA
         }
@@ -42,14 +47,14 @@ wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
     data.frame(x=xx, s=s, fA=fA, fU=fU)
 }
 
-met.fit <-
+.fit_met <-
 function(yobs, yfit, xobs, xfit,
 B=99, wtd=TRUE,
 n=512, kernel="gaussian", bw="nrd0", ...)
 {
     if (missing(xfit))
         xfit <- xobs
-    int <- range(xobs, xfit)
+    int <- range(xobs, xfit, na.rm=TRUE)
     fit <- .get_met(yfit, xfit, int=int,
         wtd=FALSE, n=n, kernel=kernel, bw=bw, ...)
     obs <- .get_met(yobs, xobs, int=int,
@@ -78,8 +83,10 @@ n=512, kernel="gaussian", bw="nrd0", ...)
                 int=int, wtd=wtd, n=n, kernel=kernel, bw=bw, ...)$s
         })
     }
-    Q <- t(apply(cbind(obs$s, L), 1, quantile, probs=c(0.25, 0.5, 0.75)))
-    #Q <- t(apply(cbind(obs$s, L), 1, quantile, probs=c(0.025, 0.5, 0.975)))
+    ## predict.loess returns NA for out of range predictions
+    ## if survece='interpolate', but surface='direct' takes forever
+    Q <- t(apply(cbind(obs$s, L), 1, quantile,
+        probs=c(0.25, 0.5, 0.75), na.rm=TRUE))
     colnames(Q) <- c("Q1", "Q2", "Q3")
     attr(Q, "B") <- B
     stats <- c(mean(yobs), quantile(yobs, seq(0, 1, by=0.25)))
@@ -87,9 +94,38 @@ n=512, kernel="gaussian", bw="nrd0", ...)
     list(fit=fit[,c("x", "s")], obs=obs, Q=data.frame(Q), stats=stats)
 }
 
-
+.plot_met <- function(x, xlab, ylab, ...) {
+    if (missing(ylab))
+        ylab <- "response"
+    if (missing(xlab))
+        xlab <- "predictor"
+    x$fit$s <- x$stats["Mean"] * x$fit$s / mean(x$fit$s)
+    x$obs$s <- x$stats["Mean"] * x$obs$s / mean(x$obs$s)
+    mq2 <- mean(x$Q$Q1)
+    x$Q$Q1 <- x$stats["Mean"] * x$Q$Q1 / mq2
+    x$Q$Q2 <- x$stats["Mean"] * x$Q$Q2 / mq2
+    x$Q$Q3 <- x$stats["Mean"] * x$Q$Q3 / mq2
+    Lim <- range(x$fit$s, x$obe$s, x$Q)
+    plot(x$fit, type="n", ylim=Lim)
+    polygon(c(x$obs$x, rev(x$obs$x)),
+        c(x$Q$Q1, rev(x$Q$Q3)),
+        border=NA, col="lightblue")
+    lines(x$obs$x, x$Q$Q2, col=4, lwd=2, lty=1)
+    lines(x$fit, col=2, lwd=2, lty=1)
+    invisible(x)
+}
 
 .met <-
+function(yobs, yfit, xobs, xfit,
+B=99, wtd=TRUE, n=512, kernel="gaussian", bw="nrd0",
+plot=TRUE, xlab, ylab, ...) {
+    x <- .fit_met(yobs, yfit, xobs, xfit,
+        B=B, wtd=wtd, n=n, kernel=kernel, bw=bw)
+    .plot_met(x, xlab=xlab, ylab=ylab, ...)
+}
+
+
+.met_old <-
 function(yobs, yfit, xobs, xfit,
 wtd=TRUE, scale=c("y", "x"),
 n=512, kernel="gaussian", bw="nrd0",
@@ -283,31 +319,7 @@ mod <- rspf(status ~ .-status, dat, m=0, B=0)
 .met_binom(dat$status, fitted(mod), dat$x1)
 .met_binom(dat$status, fitted(mod), dat$x2)
 #.met_binom(dat$status, fitted(mod), dat$x4)
-
-x <- met.fit(dat$status, fitted(mod), dat$x2)
-
-plot_met <- function(x, ...) {
-    x$fit$s <- x$stats["Mean"] * x$fit$s / mean(x$fit$s)
-    x$obs$s <- x$stats["Mean"] * x$obs$s / mean(x$obs$s)
-    mq2 <- mean(x$Q$Q1)
-    x$Q$Q1 <- x$stats["Mean"] * x$Q$Q1 / mq2
-    x$Q$Q2 <- x$stats["Mean"] * x$Q$Q2 / mq2
-    x$Q$Q3 <- x$stats["Mean"] * x$Q$Q3 / mq2
-    Lim <- range(x$fit$s, x$obe$s, x$Q)
-    plot(x$fit, type="n", ylim=Lim)
-    polygon(c(x$obs$x, rev(x$obs$x)),
-        c(x$Q$Q1, rev(x$Q$Q3)),
-        border=NA, col="lightblue")
-    lines(x$obs$x, x$Q$Q2, col=4, lwd=2, lty=1)
-    lines(x$fit, col=2, lwd=2, lty=1)
-}
-met_new <-
-function(yobs, yfit, xobs, xfit, ...) {
-    plot_met(met.fit(yobs, yfit, xobs, xfit), ...)
-}
-
-met_new(dat$status, fitted(mod), dat$x1)
-met_new(dat$status, fitted(mod), dat$x2)
+meptest(mod)
 
 mod <- glm(status ~ .-status, dat, family=binomial)
 
@@ -321,7 +333,8 @@ mod <- glm(y ~ ., x, family=poisson)
 
 .met_pois(y, fitted(mod), x$x1)
 .met_pois(y, fitted(mod), x$x2)
-.met_pois(y, fitted(mod), x$x4)
+.met_pois(y, fitted(mod), x$x3)
+meptest(mod)
 
 ## gaussian
 
@@ -331,9 +344,10 @@ plot(x$x1, mu)
 plot(x$x1, y)
 mod <- lm(y ~ ., x)
 
-.met_gauss(y, fitted(mod), x$x1)
-.met_gauss(y, fitted(mod), x$x2)
+.met_gauss(y, fitted(mod), x$x1, B=99)
+.met_gauss(y, fitted(mod), x$x2, B=99)
 #.met_gauss(y, fitted(mod), x$x4)
+meptest(mod)
 
 ## response
 model.frame(mod)[,attr(terms(mod), "response")]
