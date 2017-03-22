@@ -42,9 +42,9 @@ wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
     data.frame(x=xx, s=s, fA=fA, fU=fU)
 }
 
-.met <-
+met.fit <-
 function(yobs, yfit, xobs, xfit,
-B=0, wtd=TRUE,
+B=99, wtd=TRUE,
 n=512, kernel="gaussian", bw="nrd0", ...)
 {
     if (missing(xfit))
@@ -58,20 +58,38 @@ n=512, kernel="gaussian", bw="nrd0", ...)
     if (B > 0) {
         N <- length(xobs)
         ## need to make sure categories are represented
-        BB <- replicate(B, sample.int(N, N, replace=TRUE))
+        if (!is.null(dim(B))) {
+            BB <- B
+            B <- ncol(BB)
+        } else {
+            BB <- replicate(B, sample.int(N, N, replace=TRUE))
+        }
+        if (B < 1)
+            stop("bootstrap iterations must be > 0")
+        if (is.factor(xobs)) {
+            Str <- as.integer(xobs)
+            BBstr <- apply(data.matrix(BB), 2, function(z) Str[z])
+            nstr <- apply(BBstr, 2, function(z) length(unique(z)))
+            if (!all(nstr == length(unique(Str))))
+                stop("levels not all represented in bootstrap, provide B")
+        }
         L <- sapply(seq_len(B), function(i, ...) {
             .get_met(yobs[BB[,i]], xobs[BB[,i]],
                 int=int, wtd=wtd, n=n, kernel=kernel, bw=bw, ...)$s
         })
     }
     Q <- t(apply(cbind(obs$s, L), 1, quantile, probs=c(0.25, 0.5, 0.75)))
+    #Q <- t(apply(cbind(obs$s, L), 1, quantile, probs=c(0.025, 0.5, 0.975)))
     colnames(Q) <- c("Q1", "Q2", "Q3")
-    out <- list(fit=fit, obs=obs, Q=Q, ymean=mean(yobs))
+    attr(Q, "B") <- B
+    stats <- c(mean(yobs), quantile(yobs, seq(0, 1, by=0.25)))
+    names(stats) <- c("Mean", "Min", "Q1", "Q2", "Q3", "Max")
+    list(fit=fit[,c("x", "s")], obs=obs, Q=data.frame(Q), stats=stats)
 }
 
 
 
-.met_old <-
+.met <-
 function(yobs, yfit, xobs, xfit,
 wtd=TRUE, scale=c("y", "x"),
 n=512, kernel="gaussian", bw="nrd0",
@@ -265,6 +283,31 @@ mod <- rspf(status ~ .-status, dat, m=0, B=0)
 .met_binom(dat$status, fitted(mod), dat$x1)
 .met_binom(dat$status, fitted(mod), dat$x2)
 #.met_binom(dat$status, fitted(mod), dat$x4)
+
+x <- met.fit(dat$status, fitted(mod), dat$x2)
+
+plot_met <- function(x, ...) {
+    x$fit$s <- x$stats["Mean"] * x$fit$s / mean(x$fit$s)
+    x$obs$s <- x$stats["Mean"] * x$obs$s / mean(x$obs$s)
+    mq2 <- mean(x$Q$Q1)
+    x$Q$Q1 <- x$stats["Mean"] * x$Q$Q1 / mq2
+    x$Q$Q2 <- x$stats["Mean"] * x$Q$Q2 / mq2
+    x$Q$Q3 <- x$stats["Mean"] * x$Q$Q3 / mq2
+    Lim <- range(x$fit$s, x$obe$s, x$Q)
+    plot(x$fit, type="n", ylim=Lim)
+    polygon(c(x$obs$x, rev(x$obs$x)),
+        c(x$Q$Q1, rev(x$Q$Q3)),
+        border=NA, col="lightblue")
+    lines(x$obs$x, x$Q$Q2, col=4, lwd=2, lty=1)
+    lines(x$fit, col=2, lwd=2, lty=1)
+}
+met_new <-
+function(yobs, yfit, xobs, xfit, ...) {
+    plot_met(met.fit(yobs, yfit, xobs, xfit), ...)
+}
+
+met_new(dat$status, fitted(mod), dat$x1)
+met_new(dat$status, fitted(mod), dat$x2)
 
 mod <- glm(status ~ .-status, dat, family=binomial)
 
