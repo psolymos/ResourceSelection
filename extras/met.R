@@ -35,8 +35,8 @@ wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
             fU <- fU$y
         } else {
             xx <- seq(int[1], int[2], len=n)
-            Ctrl <- loess.control(statistics="none",
-                surface = "interpolate", #"direct"
+            Ctrl <- loess.control(statistics="none", # requires R version 3.2.3
+                surface = "interpolate", #"direct" # sloooow
                 trace.hat="approximate")
             lss <- loess(y ~ x, control=Ctrl)
             s <- predict(lss, data.frame(x=xx))
