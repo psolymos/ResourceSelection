@@ -2,7 +2,7 @@
 
 ## Version 0.3-3, Mar 1, 2017
 
-*
+* New functions: `wrsi` and `sindex` for weighted selection index.
 
 ## Version 0.3-2, Feb 28, 2017
 
