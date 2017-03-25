@@ -80,6 +80,6 @@ par(op)
 ## --- sindex calculations for multiple species
 y2 <- cbind(Spp1=y, Spp2=rev(y), Spp3=sample(y))
 (w2 <- sindex(y2, x))
-heatmap(t(as.matrix(w2)), scale="none", col=occolors()(25))
+heatmap(t(as.matrix(w2)), scale="none")
 }
 \keyword{ models }
