@@ -31,10 +31,13 @@ pch=19, lty=c(1, 2), lwd=c(2, 2), plot=TRUE, ...)
         amount
     }
     jfun <- function(tmp, minbucket=5, fmax=1, fmin=0) {
+        dd <- 0
         if (length(tmp) < minbucket) {
-            d <- dnorm(tmp, mean(tmp, na.rm=TRUE), sd(tmp, na.rm=TRUE))
-            d <- d + fmin * max(d)
-            dd <- amount * d / max(d)
+            if (length(tmp) > 1) {
+                d <- dnorm(tmp, mean(tmp, na.rm=TRUE), sd(tmp, na.rm=TRUE))
+                d <- d + fmin * max(d)
+                dd <- amount * d / max(d)
+            }
         } else {
             d <- density(tmp)
             d$y <- d$y + fmin * max(d$y)
