@@ -2,12 +2,10 @@
 
 library(ResourceSelection)
 
-.get_met <- function(y, x, int,
+.get_met <- function(y, x, int=NULL,
 wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
 {
     xcat <- is.factor(x)
-    if (missing(int))
-        int <- range(x)
     if (xcat) {
         if (wtd) {
             tabA <- table(x=x, y=y)
@@ -23,6 +21,8 @@ wtd=TRUE, n=512, kernel="gaussian", bw="nrd0", ...)
         xx <- x[seq_len(nlevels(x))]
         xx[] <- levels(x)
     } else {
+        if (is.null(int))
+            int <- range(x)
         if (wtd) {
             fA <- density(x[y==0], bw=bw,
                 kernel=kernel, n=n, from=int[1], to=int[2], ...)
@@ -54,7 +54,8 @@ n=512, kernel="gaussian", bw="nrd0", ...)
 {
     if (missing(xfit))
         xfit <- xobs
-    int <- range(xobs, xfit, na.rm=TRUE)
+    int <- if (is.factor(xobs))
+        NULL else range(xobs, xfit, na.rm=TRUE)
     fit <- .get_met(yfit, xfit, int=int,
         wtd=FALSE, n=n, kernel=kernel, bw=bw, ...)
     obs <- .get_met(yobs, xobs, int=int,
