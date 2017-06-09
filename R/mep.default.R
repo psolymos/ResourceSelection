@@ -20,6 +20,8 @@ subset=NULL, ylab, ...)
         link <- fam$link
     Terms <- attr(mf, "terms")
     vars <- attr(Terms, "dataClasses")
+    allvars <- colnames(get_all_vars(Terms, mf))
+    vars <- vars[intersect(names(vars), allvars)]
     if (is.null(which))
         which <- names(vars)
     which <- if (is.character(which)) {
