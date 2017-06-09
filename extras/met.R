@@ -147,6 +147,8 @@ function(object, which=NULL, ask, ylab, subset=NULL, ...)
     Terms <- attr(mf, "terms")
     i_resp <- attr(Terms, "response")
     vars <- attr(Terms, "dataClasses")[-i_resp]
+    allvars <- colnames(get_all_vars(Terms, mf))
+    vars <- vars[intersect(names(vars), allvars)]
     y <- mf[,i_resp]
     uv <- unique(y)
     ruv <- round(uv)
