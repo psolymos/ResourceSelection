@@ -56,6 +56,10 @@ n=512, kernel="gaussian", bw="nrd0", ...)
         xfit <- xobs
     int <- if (is.factor(xobs))
         NULL else range(xobs, xfit, na.rm=TRUE)
+    TYPE <- if (is.factor(xobs))
+        "factor" else "numeric"
+    if (is.ordered(xobs))
+        TYPE <- "ordered"
     fit <- if (!is.null(yfit)) { # meptest or siplot
         .get_met(yfit, xfit, int=int, wtd=FALSE, n=n,
             kernel=kernel, bw=bw, ...)[,c("x", "s")]
@@ -95,7 +99,7 @@ n=512, kernel="gaussian", bw="nrd0", ...)
     stats <- c(mean(yobs), quantile(yobs, seq(0, 1, by=0.25)))
     names(stats) <- c("Mean", "Min", "Q1", "Q2", "Q3", "Max")
     ## if yfit=NULL --> siplot, so fit=NULL
-    list(fit=fit, obs=obs, Q=data.frame(Q), stats=stats)
+    list(fit=fit, obs=obs, Q=data.frame(Q), stats=stats, type=TYPE)
 }
 
 .plot_met <- function(x, xlab, ylab, ...) {
@@ -115,13 +119,26 @@ n=512, kernel="gaussian", bw="nrd0", ...)
     x$Q$Q2 <- x$stats["Mean"] * x$Q$Q2 / mq2
     x$Q$Q3 <- x$stats["Mean"] * x$Q$Q3 / mq2
     Lim <- range(tmp$s, x$Q)
-    plot(tmp, type="n", ylim=Lim, xlab=xlab, ylab=ylab, ...)
-    polygon(c(x$obs$x, rev(x$obs$x)),
-        c(x$Q$Q1, rev(x$Q$Q3)),
+    if (x$type == "numeric") {
+        plot(tmp, type="n", ylim=Lim, xlab=xlab, ylab=ylab,
+            col=NA, ...)
+    } else {
+        plot(tmp, type="n", ylim=Lim, xlab=xlab, ylab=ylab,
+            col=NA, border=NA, ...)
+    }
+    ix <- iy <- seq_len(nrow(tmp))
+    o <- 0
+    if (x$type == "factor") {
+        o <- c(-0.5, 0.5)
+        ix <- rep(ix, each=2)
+        iy <- rep(iy, each=2)
+    }
+    polygon(c(as.numeric(x$obs$x[ix])+o, rev(as.numeric(x$obs$x[ix])+o)),
+        c(x$Q$Q1[iy], rev(x$Q$Q3[iy])),
         border=NA, col="lightblue")
-    lines(x$obs$x, x$Q$Q2, col=4, lwd=2, lty=1)
+    lines(as.numeric(x$obs$x[ix])+o, x$Q$Q2[iy], col=4, lwd=2, lty=1)
     if (!is.null(x$fit))
-        lines(x$fit, col=2, lwd=2, lty=1)
+        lines(as.numeric(tmp$x[ix])+o, tmp$s[iy], col=2, lwd=2, lty=1)
     invisible(x)
 }
 
@@ -206,6 +223,33 @@ function(object, sip=FALSE, which=NULL, ask, ylab, subset=NULL, ...)
     invisible(out)
 }
 
+.get_frame <-
+function(formula, data, type="numeric")
+{
+    if (missing(data))
+        data <- parent.frame()
+    mf <- match.call(expand.dots = FALSE)
+    mm <- match(c("formula", "data"), names(mf), 0)
+    mf <- mf[c(1, mm)]
+    mf$drop.unused.levels <- TRUE
+    mf[[1]] <- as.name("model.frame")
+    mf <- eval(mf, parent.frame())
+    Y <- model.response(mf, "numeric")
+    ff <- formula
+    ff[[2]] <- NULL
+    mt <- terms(ff, data = data)
+    X <- model.matrix(mt, mf)
+    list(
+        call=match.call(),
+        formula=formula,
+        terms=mt,
+        levels=.getXlevels(mt, mf),
+        contrasts=attr(X, "contrasts"),
+        model=mf,
+        x=X,
+        y=model.response(mf, type))
+}
+
 ## meptest: selection index and fit
 
 meptest <- function (object, ...)
@@ -226,7 +270,9 @@ siplot <- function (object, ...)
 siplot.default <-
 function(y, x, which=NULL, ask, ylab, subset=NULL, ...)
 {
-    object <- lm(y ~ ., data=as.data.frame(x))
+    if (NCOL(x) < 2L)
+        x <- as.data.frame(x=x)
+    object <- .get_frame(formula=y ~ ., data=x, type="numeric")
     .mep_engine(object, sip=TRUE,
         which=which, ask=ask, ylab=ylab, subset=subset, ...)
 }
@@ -234,7 +280,7 @@ function(y, x, which=NULL, ask, ylab, subset=NULL, ...)
 siplot.formula <-
 function(formula, data, which=NULL, ask, ylab, subset=NULL, ...)
 {
-    object <- lm(formula=formula, data=data)
+    object <- .get_frame(formula=formula, data=data, type="numeric")
     .mep_engine(object, sip=TRUE,
         which=which, ask=ask, ylab=ylab, subset=subset, ...)
 }
