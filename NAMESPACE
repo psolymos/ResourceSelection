@@ -10,7 +10,8 @@ importFrom(stats, BIC,
   binomial, coef, cor, cov, delete.response,
   glm.fit, lowess, make.link, model.matrix.default,
   model.response, optim, pchisq, pnorm,
-  printCoefmat, qnorm, quantile, sd, terms, xtabs)
+  printCoefmat, qnorm, quantile, sd, terms, xtabs,
+  get_all_vars)
 importFrom(Matrix, nearPD)
 importFrom(grDevices, dev.interactive, devAskNewPage,
   terrain.colors, rgb)

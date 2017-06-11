@@ -12,7 +12,7 @@ mep(object, ...)
 
 \method{mep}{default}(object, which=NULL, link=NULL,
     level=0.95, unique=10, n=25, minbucket=5, digits=4,
-    col.points, col.lines=c(4, 4), pch=19, lty=c(1, 2), lwd=c(2,2),
+    col.points, col.lines=c(2, 2), pch=19, lty=c(1, 2), lwd=c(2,2),
     ask, subset=NULL, ylab, ...)
 }
 \arguments{
