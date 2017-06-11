@@ -8,10 +8,10 @@ function (object, ...)
     UseMethod("avp")
 
 avp.default <-
-function(object, z,
+function(object, z, h=0,
 level=0.95, unique=10,
 n=25, minbucket=5, digits=4,
-col.points, col.lines=c(2, 2),
+col.points, col.lines=c(2, 2), col.h="grey",
 pch=19, lty=c(1, 2), lwd=c(2,2), ask,
 subset=NULL, ylab, ...)
 {
@@ -23,7 +23,7 @@ subset=NULL, ylab, ...)
         z <- z[subset,,drop=FALSE]
         res <- res[subset]
     }
-    vars <- sapply(goats, function(z) class(z)[1])
+    vars <- sapply(z, function(z) class(z)[1])
     np <- length(vars)
     if (np < 1)
         stop("must define at least one variable")
@@ -51,6 +51,7 @@ subset=NULL, ylab, ...)
             n=n, minbucket=minbucket, digits=digits,
             col.points=col.points, col.lines=col.lines,
             pch=pch, lty=lty, lwd=lwd, plot=TRUE, ...)
+        abline(h=h, col=col.h)
     }
     invisible(out)
 }
