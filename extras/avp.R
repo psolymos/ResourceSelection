@@ -15,36 +15,15 @@ col.points, col.lines=c(2, 2),
 pch=19, lty=c(1, 2), lwd=c(2,2), ask,
 subset=NULL, ylab, ...)
 {
-#    mf <- model.frame(object)
-#    fit <- fitted(object)
     res <- residuals(object)
     z <- as.data.frame(z)
     if (length(res) != nrow(z))
         stop("dimension mismatch")
     if (!is.null(subset)) {
-#        mf <- mf[subset,,drop=FALSE]
         z <- z[subset,,drop=FALSE]
-#        fit <- fit[subset]
         res <- res[subset]
     }
-#    link <- NULL
-#    fam <- try(family(object), silent=TRUE)
-#    if (!inherits(fam, "try-error"))
-#        link <- fam$link
-#    Terms <- attr(mf, "terms")
     vars <- sapply(goats, function(z) class(z)[1])
-#    allvars <- colnames(get_all_vars(Terms, mf))
-#    vars <- vars[intersect(names(vars), allvars)]
-
-#    if (is.null(which))
-#        which <- names(vars)
-#    which <- if (is.character(which)) {
-#        which[match(names(vars), which)]
-#    } else {
-#        names(vars)[which]
-#    }
-#    which <- which[!is.na(which)]
-#    vars <- vars[which]
     np <- length(vars)
     if (np < 1)
         stop("must define at least one variable")
@@ -75,4 +54,3 @@ subset=NULL, ylab, ...)
     }
     invisible(out)
 }
-
