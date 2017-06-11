@@ -10,7 +10,10 @@ pch=19, lty=c(1, 2), lwd=c(2, 2), plot=TRUE, ...)
     x <- if (type == "factor")
         as.factor(x) else as.numeric(x)
     if (missing(col.points))
-        col.points <- rgb(0.9, 0, 0.9, max(1-min(length(y), 100)/100, 0.05))
+        ## pink
+#        col.points <- rgb(0.9, 0, 0.9, max(1-min(length(y), 100)/100, 0.05))
+        ## turquoise
+        col.points <- rgb(0.25, 0.87, 0.81, max(1-min(length(y), 100)/100, 0.05))
     jitter_amount <- function (x, factor = 1, amount = NULL) {
         z <- diff(r <- range(x[is.finite(x)]))
         if (z == 0)
