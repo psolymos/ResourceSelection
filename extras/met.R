@@ -234,7 +234,6 @@ function(formula, data, type="numeric")
     mf$drop.unused.levels <- TRUE
     mf[[1]] <- as.name("model.frame")
     mf <- eval(mf, parent.frame())
-    Y <- model.response(mf, "numeric")
     ff <- formula
     ff[[2]] <- NULL
     mt <- terms(ff, data = data)
