@@ -683,3 +683,7 @@ function(object, ...) {
         distr=family(object)$family, size=1, null=NULL,
         p=length(coef(object))-1)
 }
+
+
+## todo: meptest CI fails for binomial when too many 0/1
+## siplot: multivariate responses
