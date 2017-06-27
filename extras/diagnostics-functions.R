@@ -582,6 +582,7 @@ function(formula, data, which=NULL, ask, ylab, subset=NULL, ...)
 
 ## calculate PI for lm/glm
 
+## make sure that ties are not averaged (integer interval is not real valued)
 predict_sim <-
 function(object, newdata=NULL,
 interval = c("none", "confidence", "prediction"),
