@@ -685,6 +685,18 @@ function(object, ...) {
         p=length(coef(object))-1)
 }
 
+## http://blog.revolutionanalytics.com/2016/08/roc-curves-in-two-lines-of-code.html
+## https://ccrma.stanford.edu/workshops/mir2009/references/ROCintro.pdf
+simple_roc <- function(labels, scores){
+  labels <- labels[order(scores, decreasing=TRUE)]
+  data.frame(TPR=cumsum(labels)/sum(labels), FPR=cumsum(!labels)/sum(!labels), labels)
+}
+simple_auc <- function(ROC) {
+    ROC$inv_spec <- 1-ROC$FPR
+    dx <- diff(ROC$inv_spec)
+    sum(dx * ROC$TPR[-1]) / sum(dx)
+}
 
 ## todo: meptest CI fails for binomial when too many 0/1
 ## siplot: multivariate responses
+## PI should be integer for count data
