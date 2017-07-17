@@ -1,3 +1,5 @@
+## TODO: implement conditioning (i.e. different SI by levels)
+
 ## marginal effects test (met)
 
 library(ResourceSelection)
