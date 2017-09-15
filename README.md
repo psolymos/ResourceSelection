@@ -1,7 +1,7 @@
 # ResourceSelection: Resource Selection (Probability) Functions for Use-Availability Data
 
 [![CRAN version](http://www.r-pkg.org/badges/version/ResourceSelection)](http://cran.rstudio.com/web/packages/ResourceSelection/index.html)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/ResourceSelection)](http://cran.rstudio.com/web/packages/ResourceSelection/index.html)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/ResourceSelection)](https://www.rdocumentation.org/packages/ResourceSelection/)
 [![Linux build status](https://travis-ci.org/psolymos/ResourceSelection.svg?branch=master)](https://travis-ci.org/psolymos/ResourceSelection)
 [![Windows build status](https://ci.appveyor.com/api/projects/status/a4a31xk3k18ubdku?svg=true)](https://ci.appveyor.com/project/psolymos/resourceselection)
 [![Code coverage status](https://codecov.io/gh/psolymos/ResourceSelection/branch/master/graph/badge.svg)](https://codecov.io/gh/psolymos/ResourceSelection)
