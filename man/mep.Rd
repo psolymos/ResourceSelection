@@ -92,6 +92,12 @@ to indicate goodness of fit or the lack of it.
 The produces one or several marginal plots as a side effect.
 Returns a list of quantiles of fitted values
 corresponding to binned/unique values of variables in the input object.}
+\references{
+Avgar, T., Lele, S. R., Keim, J. L. & Boyce, M. S. (2017)
+Relative Selection Strength:
+Quantifying effect size in habitat‐ and step‐selection inference.
+Ecology and Evolution 7, 5322--5330.
+}
 \author{
 Peter Solymos and Subhash Lele
 }
