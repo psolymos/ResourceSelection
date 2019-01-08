@@ -12,6 +12,7 @@ Authors@R: c(
         role = c("aut")),
     person(given = "Peter",
         family = "Solymos",
+        email = "solymos@ualberta.ca",
         comment = c(ORCID = "0000-0001-7337-1740"),
         role = c("aut", "cre")))
 Author: Subhash R. Lele [aut], Jonah L. Keim [aut], Peter Solymos [aut, cre]
