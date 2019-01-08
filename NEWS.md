@@ -1,7 +1,10 @@
 # ResourceSelection package version history
 
-## Version 0.3-3, Mar 1, 2017
+## Version 0.3-3, January 7, 2019
 
+* Fixed `vcov` method for `rsf.null` subclass: now returns `<0 x 0 matrix>`.
+* Fixed `mep` function to properly handle the lack of `family(object)`,
+  as a result now it is not failing for `rsf`/`rspf` models.
 * New functions: `wrsi` and `sindex` for weighted selection index.
 
 ## Version 0.3-2, Feb 28, 2017
@@ -71,7 +74,7 @@
 ## Version 0.1-5, Sept 13 20, 2012
 
 * new argument `m` in `rsf()`, `rspf()` for allowing
-  local availability (matched use-avalable design).
+  local availability (matched use-available design).
 * `goats` data set added from Lele and Keim 2006.
 * Rd for `goats` contains an example analysis, too.
 * `/inst/COPYING` removed.
@@ -79,7 +82,7 @@
 ## Version 0.1-4, Oct 18, 2011
 
 * R (>= 2.13.0) dependency added
-  to avoide `R CMD check ERROR` on old R
+  to avoid `R CMD check ERROR` on old R
   (reported by Uwe Ligges).
 
 ## Version 0.1-3, August 23, 2011
@@ -100,4 +103,4 @@
 
 ## Version 0.1-0, May 20, 2011
 
-* Initial buch of functions released on R-Forge and CRAN.
+* Initial bunch of functions released on R-Forge and CRAN.

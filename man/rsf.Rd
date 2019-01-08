@@ -115,7 +115,7 @@ containing the following components:
   \item{coefficients}{a named vector of coefficients.}
   \item{std.error}{a named vector of standard errors
     for the coefficients.}
-  \item{loglik}{the maximized pseudo log-likelihood acording to Lele 2009.}
+  \item{loglik}{the maximized pseudo log-likelihood according to Lele 2009.}
   \item{results}{\code{\link{optim}} results.}
   \item{link}{character, value of the link function used.}
   \item{control}{control parameters for \code{\link{optim}}.}

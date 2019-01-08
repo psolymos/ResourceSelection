@@ -3,7 +3,7 @@
 \alias{makeUsedAvail.default}
 \alias{makeUsedAvail.formula}
 \title{
-Make a Used-Aavailable Data Frame
+Make a Used-Available Data Frame
 }
 \description{
 Make a used-available data frame from a presence-absence type data.
@@ -33,7 +33,7 @@ other arguments.
 }
 }
 \value{
-The function returns a data frame, where used and available portions of 
+The function returns a data frame, where used and available portions of
 the input data are bound on top of each other, the first column
 refers to \code{y}, where used (1) and available (0) locations are
 indicated different from the input values.

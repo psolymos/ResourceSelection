@@ -1,7 +1,7 @@
 \name{simulateUsedAvail}
 \alias{simulateUsedAvail}
 \title{
-Simulate Used-Aavailable Data
+Simulate Used-Available Data
 }
 \description{
 Simulates used-available data.
