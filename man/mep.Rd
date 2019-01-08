@@ -95,7 +95,7 @@ corresponding to binned/unique values of variables in the input object.}
 \references{
 Avgar, T., Lele, S. R., Keim, J. L. & Boyce, M. S. (2017)
 Relative Selection Strength:
-Quantifying effect size in habitat‐ and step‐selection inference.
+Quantifying effect size in habitat- and step-selection inference.
 Ecology and Evolution 7, 5322--5330.
 }
 \author{
