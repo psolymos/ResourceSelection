@@ -1,5 +1,9 @@
 # ResourceSelection package version history
 
+## Version 0.3-4, January 8, 2019
+
+* Fixed family detection in `mep`.
+
 ## Version 0.3-3, January 7, 2019
 
 * Fixed `vcov` method for `rsf.null` subclass: now returns `<0 x 0 matrix>`.
