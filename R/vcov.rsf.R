@@ -1,6 +1,8 @@
 vcov.rsf <-
 function (object, type, ...)
 {
+    if (inherits(object, "rsf.null"))
+        return(matrix(0, 0, 0))
     boot <- object$bootstrap
     if (missing(type)) {
         type <- if (is.null(boot))
