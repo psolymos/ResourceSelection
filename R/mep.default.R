@@ -16,7 +16,7 @@ subset=NULL, ylab, ...)
     }
     link <- NULL
     fam <- try(family(object), silent=TRUE)
-    if (!inherits(fam, "try-error"))
+    if (!inherits(fam, "try-error") && !is.na(fam))
         link <- fam$link
     Terms <- attr(mf, "terms")
     vars <- attr(Terms, "dataClasses")
