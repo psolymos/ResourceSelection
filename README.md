@@ -136,6 +136,6 @@ _Journal of Wildlife Management_ 73, 122--127. [[link](http://dx.doi.org/10.2193
 
 Lele, S. R. &  Keim, J. L. (2006)
 Weighted distributions and estimation of resource selection probability functions.
-_Ecology_ 87, 3021--3028. [[link](http://dx.doi.org/10.1890/0012-9658(2006)87[3021:WDAEOR]2.0.CO;2)]
+_Ecology_ 87, 3021--3028. [[link](http://dx.doi.org/10.1890/0012-9658(2006)87%5B3021:WDAEOR%5D2.0.CO;2)]
 
 Solymos, P. & Lele, S. R. (2016) Revisiting resource selection probability functions and single-visit methods: clarification and extensions. _Methods in Ecology and Evolution_ 7, 196--205. [[link](http://dx.doi.org/10.1111/2041-210X.12432), [preprint](http://arxiv.org/abs/1501.05880)]

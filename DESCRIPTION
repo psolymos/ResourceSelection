@@ -1,8 +1,8 @@
 Package: ResourceSelection
 Type: Package
 Title: Resource Selection (Probability) Functions for Use-Availability Data
-Version: 0.3-4
-Date: 2019-01-08
+Version: 0.3-5
+Date: 2019-07-22
 Authors@R: c(
   person(given = c("Subhash", "R."),
     family = "Lele",
@@ -21,7 +21,7 @@ Maintainer: Peter Solymos <solymos@ualberta.ca>
 Description: Resource Selection (Probability) Functions
   for use-availability wildlife data
   based on weighted distributions as described in
-  Lele and Keim (2006) <doi:10.1890/0012-9658(2006)87[3021:WDAEOR]2.0.CO;2>,
+  Lele and Keim (2006) <doi:10.1890/0012-9658(2006)87%5B3021:WDAEOR%5D2.0.CO;2>,
   Lele (2009) <doi:10.2193/2007-535>,
   and Solymos & Lele (2016) <doi:10.1111/2041-210X.12432>.
 Depends: R (>= 2.13.0)

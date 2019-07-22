@@ -1,5 +1,9 @@
 # ResourceSelection package version history
 
+## Version 0.3-5, July 22, 2019
+
+* Fixing URL encoding in DOI (found by new HTML tidy on the CRAN master).
+
 ## Version 0.3-4, January 8, 2019
 
 * Fixed family detection in `mep`.
