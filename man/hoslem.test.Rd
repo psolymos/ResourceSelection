@@ -18,6 +18,11 @@ expected values.
 }
   \item{g}{
 number of bins to use to calculate quantiles.
+Needs to be at least 2. The degrees of freedom of the test is \code{g-2}
+but the number of bins might also depend on the data (i.e. due to identical
+quantile values that lead to empty bins). In case when the number of bins 
+does not equal \code{g}, the degrees of freedom will depend on the
+number of bins that is less than \code{g}. In such case a warning is produced.
 }
 }
 \details{
