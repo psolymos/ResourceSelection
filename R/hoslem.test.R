@@ -14,7 +14,7 @@ hoslem.test <- function (x, y, g = 10) {
     chisq <- sum((observed - expected)^2/expected)
     G <- length(unique(cutyhat))
     if (G < 2L)
-        stop("The number of bins led to negative df."
+        stop("The number of bins led to negative df.")
     PVAL = 1 - pchisq(chisq, G - 2)
     PARAMETER <- G - 2
     names(chisq) <- "X-squared"
