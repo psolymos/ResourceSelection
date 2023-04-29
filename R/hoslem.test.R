@@ -1,4 +1,6 @@
 hoslem.test <- function (x, y, g = 10) {
+    if (g < 2L)
+        stop("Argument g must be at least 2.")
     DNAME <- paste(deparse(substitute(x)), deparse(substitute(y)), 
         sep = ", ")
     METHOD <- "Hosmer and Lemeshow goodness of fit (GOF) test"
@@ -11,10 +13,14 @@ hoslem.test <- function (x, y, g = 10) {
         cutyhat)
     chisq <- sum((observed - expected)^2/expected)
     G <- length(unique(cutyhat))
+    if (G < 2L)
+        stop("The number of bins led to negative df."
     PVAL = 1 - pchisq(chisq, G - 2)
     PARAMETER <- G - 2
     names(chisq) <- "X-squared"
     names(PARAMETER) <- "df"
+    if (G < g)
+        warning("The data did not allow for the requested number of bins.")
     structure(list(statistic = chisq, parameter = PARAMETER, 
         p.value = PVAL, method = METHOD, data.name = DNAME, observed = observed, 
         expected = expected), class = "htest")
