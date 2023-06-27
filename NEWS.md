@@ -1,5 +1,10 @@
 # ResourceSelection package version history
 
+## Version 0.3-6, June 27, 2023
+
+* `hoslem.test` handles binning issues better when data is skewed and produces
+  meaningful warnings and error when G < 2 (#18).
+
 ## Version 0.3-5, July 22, 2019
 
 * Fixing URL encoding in DOI (found by new HTML tidy on the CRAN master).
