@@ -1,5 +1,5 @@
 # Check spelling
-dict <- hunspell::dictionary('en_CA')
+dict <- hunspell::dictionary('en_US')
 devtools::spell_check()
 spelling::update_wordlist()
 
